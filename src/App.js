@@ -10,6 +10,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       player: 'x',
+      log: [],
     };
   }
 
@@ -31,7 +32,7 @@ class App extends React.Component {
               /* {console.log(xx);} */
               return (<tr key={Math.random()}>
                 {[...Array(y)].map((_, yy) =>
-                  <td x={x} y={y} key={Math.random()} onClick={this.click.bind(this)}></td>
+                  <td x={x} y={y} key={Math.random()} onClick={this.click.bind(this, x, y)}></td>
                 )}
               </tr>);
             }
@@ -40,8 +41,16 @@ class App extends React.Component {
     </table>);
   }
 
-  click() {
+  click(x,y) {
+    this.writeToLog(x,y);
     this.changePlayer();
+  }
+  
+  writeToLog(x, y) {
+    this.setState((state, props) => {
+      console.log('writeToLog', state.log);
+      return {log: state.log.concat([[x,y,this.state.player]])};
+    });
   }
 
   changePlayer() {
