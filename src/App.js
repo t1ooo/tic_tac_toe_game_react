@@ -16,12 +16,15 @@ class App extends React.Component {
   }
 
   render() {
+    const winner = this.isWin(3);
+    const info = (winner === '') 
+      ? <div>Next player: {this.state.player}</div>
+      : <div>Winner: {this.isWin(3)}</div>;
     return (
       <div className="App">
           {this.table(3, 3)}
           <div>
-            Wiiner: {this.isWin(3)}
-            Next player: {this.state.player}
+            {info}
             <div>
               <li key={Math.random()}>
                 <button onClick={this.changeLogStateIndex.bind(this, -1, -1)}>Go to game start</button>
