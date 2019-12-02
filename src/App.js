@@ -178,18 +178,19 @@ class App extends React.Component {
   }
 
   markCell(x,y) {
-    // someone won
-    if (this.isWin(3) !== '') {
-      return;
-    }
     /* console.log(this.state.logStateIndex, this.state.log.length); */
     // mark after select state
     if (this.state.logStateIndex !== this.state.log.length) {
       this.truncateLog(this.state.logStateIndex+1);
+      //this.truncateLog(this.state.logStateIndex+2);
       //console.log('truncate:', this.state.logStateIndex, this.state.log.length);
     }
     // already market
     if (this.getCellContent(x,y) !== '') {
+      return;
+    }
+    // someone won
+    if (this.isWin(3) !== '') {
       return;
     }
     this.incrLogStateIndex(x,y);
