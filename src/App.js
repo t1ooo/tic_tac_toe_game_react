@@ -11,6 +11,7 @@ class App extends React.Component {
     this.state = {
       player: 'x',
       log: [],
+      logStateIndex: 0,
     };
   }
 
@@ -21,14 +22,34 @@ class App extends React.Component {
           <div>
             Next player: {this.state.player}
             <div>
-              <li key={Math.random()}><button>Go to game start</button></li>
-              {this.state.log.map((v,k)=>
-                (<li key={Math.random()}><button>Go to move {k+1}: {v.x} {v.y} {v.player}</button></li>)
+              <li key={Math.random()}>
+                <button onClick={this.changeLogStateIndex.bind(this, -1, -1)}>Go to game start</button>
+              </li>
+              {this.state.log./* slice(this.state.logStateIndex). */map((v,k)=>
+                <li key={Math.random()}>
+                  <button onClick={this.changeLogStateIndex.bind(this, v.x, v.y)}>
+                    Go to move {k+1}: {v.x} {v.y} {v.player}
+                  </button>
+                </li>
               )}
             </div>
           </div>
       </div>
     );
+  }
+  
+  changeLogStateIndex(x,y) {
+    this.setState((state, props) => {
+      console.log('changeLogStateIndex', this.getCellIndex(x,y));
+      return {logStateIndex: this.getCellIndex(x,y)};
+    });
+  }
+  
+  incrLogStateIndex(x,y) {
+    this.setState((state, props) => {
+      console.log('incrLogStateIndex', state.logStateIndex+1);
+      return {logStateIndex: state.logStateIndex+1};
+    });
   }
 
   table(x, y) {
@@ -53,9 +74,15 @@ class App extends React.Component {
   }
 
   markCell(x,y) {
+    /* console.log(this.state.logStateIndex, this.state.log.length); */
+    if (this.state.logStateIndex !== this.state.log.length) {
+      this.truncateLog(this.state.logStateIndex+1);
+      console.log('truncate', this.state.logStateIndex, this.state.log.length);
+    }
     if (this.getCellContent(x,y) !== '') {
       return;
     }
+    this.incrLogStateIndex(x,y);
     this.writeToLog(x,y);
     this.changePlayer();
   }
@@ -64,6 +91,13 @@ class App extends React.Component {
     this.setState((state, props) => {
       console.log('writeToLog', state.log);
       return {log: state.log.concat({x:x,y:y,player:this.state.player})};
+    });
+  }
+  
+  truncateLog(size) {
+    this.setState((state, props) => {
+      console.log('truncateLog', size);
+      return {log: state.log.slice(0, size)};
     });
   }
 
@@ -79,13 +113,26 @@ class App extends React.Component {
   }
   
   getCellContent(x,y) {
-    for(let v of this.state.log) {
+    //for(let v of this.state.log) {
+    for(let i=0; i<this.state.log.length; i++) {
+      const v = this.state.log[i];
       /* console.log(v); */
-      if (v.x === x && v.y === y) {
+      if (v.x === x && v.y === y && i <= this.state.logStateIndex) {
         return v.player;
       }
     }
     return '';
+  }
+  
+  getCellIndex(x,y) {
+    //for(let [k,v] of this.state.log) {
+    for(let i=0; i<this.state.log.length; i++) {
+      const v = this.state.log[i];
+      if (v.x === x && v.y === y) {
+        return i;
+      }
+    }
+    return -1;
   }
 }
 
