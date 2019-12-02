@@ -175,6 +175,9 @@ class App extends React.Component {
   }
 
   markCell(x,y) {
+    if (this.isWin(3) !== '') {
+      return;
+    }
     /* console.log(this.state.logStateIndex, this.state.log.length); */
     if (this.state.logStateIndex !== this.state.log.length) {
       this.truncateLog(this.state.logStateIndex+1);
