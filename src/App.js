@@ -53,6 +53,9 @@ class App extends React.Component {
   }
 
   click(x,y) {
+    if (this.getCellContent(x,y) !== '') {
+      return;
+    }
     this.writeToLog(x,y);
     this.changePlayer();
   }
