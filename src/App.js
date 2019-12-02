@@ -12,7 +12,7 @@ class App extends React.Component {
       player: 'x',
     };
   }
-  
+
   render() {
     return (
       <div className="App">
@@ -23,19 +23,36 @@ class App extends React.Component {
       </div>
     );
   }
-  
+
   table(x, y) {
     return (<table className="App-table">
         <tbody>
-          {[...Array(x)].map((_, xx) => 
-            <tr key={xx}>
-              {[...Array(y)].map((_, yy) => 
-                <td x={x} y={y} key={''+x+y}></td>
-              )}
-            </tr>
+          {[...Array(x)].map((_, xx) => {
+              /* {console.log(xx);} */
+              return (<tr key={Math.random()}>
+                {[...Array(y)].map((_, yy) =>
+                  <td x={x} y={y} key={Math.random()} onClick={this.click.bind(this)}></td>
+                )}
+              </tr>);
+            }
           )}
-        </tbody> 
+        </tbody>
     </table>);
+  }
+
+  click() {
+    this.changePlayer();
+  }
+
+  changePlayer() {
+    console.log('changePlayer');
+    const players = {
+      'x':'o',
+      'o':'x',
+    };
+    this.setState((state, props) => {
+      return {player: players[state.player]};
+    });
   }
 }
 
