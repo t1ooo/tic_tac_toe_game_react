@@ -40,7 +40,7 @@ class App extends React.Component {
                 {[...Array(y)].map((_, yy) =>
                   <td
                     key={Math.random()} 
-                    onClick={this.click.bind(this, xx, yy)}
+                    onClick={this.markCell.bind(this, xx, yy)}
                     >
                     {this.getCellContent(xx, yy)}
                   </td>
@@ -52,7 +52,7 @@ class App extends React.Component {
     </table>);
   }
 
-  click(x,y) {
+  markCell(x,y) {
     if (this.getCellContent(x,y) !== '') {
       return;
     }
