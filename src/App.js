@@ -9,7 +9,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      player: 'x',
     };
   }
   
@@ -17,6 +17,9 @@ class App extends React.Component {
     return (
       <div className="App">
           {this.table(3, 3)}
+          <div>
+            Next player: {this.state.player}
+          </div>
       </div>
     );
   }
@@ -31,7 +34,7 @@ class App extends React.Component {
               )}
             </tr>
           )}
-        </tbody>
+        </tbody> 
     </table>);
   }
 }
