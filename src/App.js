@@ -21,9 +21,9 @@ class App extends React.Component {
           <div>
             Next player: {this.state.player}
             <div>
-              <li><button>Go to game start</button></li>
-              {this.state.log.map((v,i)=>
-                (<li><button>Go to move {i+1}: {v}</button></li>)
+              <li key={Math.random()}><button>Go to game start</button></li>
+              {this.state.log.map((v,k)=>
+                (<li key={Math.random()}><button>Go to move {k+1}: {v.x} {v.y} {v.player}</button></li>)
               )}
             </div>
           </div>
@@ -38,7 +38,12 @@ class App extends React.Component {
               /* {console.log(xx);} */
               return (<tr key={Math.random()}>
                 {[...Array(y)].map((_, yy) =>
-                  <td x={x} y={y} key={Math.random()} onClick={this.click.bind(this, x, y)}></td>
+                  <td
+                    key={Math.random()} 
+                    onClick={this.click.bind(this, xx, yy)}
+                    >
+                    {this.getCellContent(xx, yy)}
+                  </td>
                 )}
               </tr>);
             }
@@ -55,7 +60,7 @@ class App extends React.Component {
   writeToLog(x, y) {
     this.setState((state, props) => {
       console.log('writeToLog', state.log);
-      return {log: state.log.concat([[x,y,this.state.player]])};
+      return {log: state.log.concat({x:x,y:y,player:this.state.player})};
     });
   }
 
@@ -68,6 +73,16 @@ class App extends React.Component {
     this.setState((state, props) => {
       return {player: players[state.player]};
     });
+  }
+  
+  getCellContent(x,y) {
+    for(let v of this.state.log) {
+      /* console.log(v); */
+      if (v.x === x && v.y === y) {
+        return v.player;
+      }
+    }
+    return '';
   }
 }
 
