@@ -20,6 +20,12 @@ class App extends React.Component {
           {this.table(3, 3)}
           <div>
             Next player: {this.state.player}
+            <div>
+              <li><button>Go to game start</button></li>
+              {this.state.log.map((v,i)=>
+                (<li><button>Go to move {i+1}: {v}</button></li>)
+              )}
+            </div>
           </div>
       </div>
     );
