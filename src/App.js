@@ -44,7 +44,7 @@ class App extends React.Component {
   
   changeLogStateIndex(x,y) {
     this.setState((state, props) => {
-      const logStateIndex = this.getCellIndex(x,y);
+      const logStateIndex = this._getCellIndex(x, y, state.log);
       const player = this.nextPlayer(state.log[logStateIndex].player);
       console.log('changeLogStateIndex:', logStateIndex);
       return {
@@ -88,12 +88,12 @@ class App extends React.Component {
     diagonal left right:   0 0, 1 1, ..., x+1 y+1
     diagonal right left:   3 0, 2 1, ..., x-1 y+1
   */
-  _isWin(size, log) {
+  _isWin(size, log, logStateIndex) {
     const group = {
         'x':{'x':[],'y':[]},
         'o':{'x':[],'y':[]},
     }
-    for(let i=0; i<log.length; i++) {
+    for(let i=0; i<log.length && i <= logStateIndex; i++) {
       const v = log[i];
       /* group[v.player] = {v.x, v.x}; */
       group[v.player]['x'].push(v.x);
@@ -183,7 +183,7 @@ class App extends React.Component {
   }
 
   isWin(size, state) {
-    return this._isWin(size, this.state.log);
+    return this._isWin(size, this.state.log, this.state.logStateIndex);
   }
 
   //markCell(x,y) {
@@ -222,7 +222,7 @@ class App extends React.Component {
         return;
       }
       // someone won
-      if (this._isWin(3, log) !== '') {
+      if (this._isWin(3, log, logStateIndex) !== '') {
         return;
       }
       //this.incrLogStateIndex(x,y);
@@ -277,25 +277,31 @@ class App extends React.Component {
   
   _getCellContent(x,y, log, logStateIndex) {
     //for(let v of this.state.log) {
-    for(let i=0; i<log.length; i++) {
+    //for(let i=0; i<log.length; i++) {
+    for(let i=0; i<log.length && i <= logStateIndex; i++) {
       const v = log[i];
       /* console.log(v); */
-      if (v.x === x && v.y === y && i <= logStateIndex) {
+      //if (v.x === x && v.y === y && i <= logStateIndex) {
+      if (v.x === x && v.y === y) {
         return v.player;
       }
     }
     return '';
   }
   
-  getCellIndex(x,y) {
+  _getCellIndex(x, y, log) {
     //for(let [k,v] of this.state.log) {
-    for(let i=0; i<this.state.log.length; i++) {
-      const v = this.state.log[i];
+    for(let i=0; i<log.length; i++) {
+      const v = log[i];
       if (v.x === x && v.y === y) {
         return i;
       }
     }
     return -1;
+  }
+  
+  getCellIndex(x,y) {
+    return this._getCellIndex(x, y, this.state.log);
   }
 }
 
