@@ -19,7 +19,7 @@ class App extends React.Component {
     const winner = this.isWin(3);
     const info = (winner === '') 
       ? <div>Next player: {this.state.player}</div>
-      : <div>Winner: {this.isWin(3)}</div>;
+      : <div>Winner: {winner}</div>;
     return (
       <div className="App">
           {this.table(3, 3)}
@@ -88,13 +88,13 @@ class App extends React.Component {
     diagonal left right:   0 0, 1 1, ..., x+1 y+1
     diagonal right left:   3 0, 2 1, ..., x-1 y+1
   */
-  isWin(size) {
+  _isWin(size, log) {
     const group = {
         'x':{'x':[],'y':[]},
         'o':{'x':[],'y':[]},
     }
-    for(let i=0; i<this.state.log.length; i++) {
-      const v = this.state.log[i];
+    for(let i=0; i<log.length; i++) {
+      const v = log[i];
       /* group[v.player] = {v.x, v.x}; */
       group[v.player]['x'].push(v.x);
       group[v.player]['y'].push(v.y);
@@ -182,25 +182,62 @@ class App extends React.Component {
     return '';
   }
 
+  isWin(size, state) {
+    return this._isWin(size, this.state.log);
+  }
+
+  //markCell(x,y) {
+  //  /* console.log(this.state.logStateIndex, this.state.log.length); */
+  //  // mark after select state
+  //  if (this.state.logStateIndex !== this.state.log.length) {
+  //    this.truncateLog(this.state.logStateIndex+1);
+  //    //this.truncateLog(this.state.logStateIndex+2);
+  //    //console.log('truncate:', this.state.logStateIndex, this.state.log.length);
+  //  }
+  //  // already market
+  //  if (this.getCellContent(x,y) !== '') {
+  //    return;
+  //  }
+  //  // someone won
+  //  if (this.isWin(3) !== '') {
+  //    return;
+  //  }
+  //  this.incrLogStateIndex(x,y);
+  //  this.writeToLog(x,y);
+  //  this.changePlayer();
+  //}
+  
   markCell(x,y) {
-    /* console.log(this.state.logStateIndex, this.state.log.length); */
-    // mark after select state
-    if (this.state.logStateIndex !== this.state.log.length) {
-      this.truncateLog(this.state.logStateIndex+1);
-      //this.truncateLog(this.state.logStateIndex+2);
-      //console.log('truncate:', this.state.logStateIndex, this.state.log.length);
-    }
-    // already market
-    if (this.getCellContent(x,y) !== '') {
-      return;
-    }
-    // someone won
-    if (this.isWin(3) !== '') {
-      return;
-    }
-    this.incrLogStateIndex(x,y);
-    this.writeToLog(x,y);
-    this.changePlayer();
+    this.setState((state, props) => {     
+      let log = state.log;
+      let logStateIndex = state.logStateIndex;
+      let player = state.player;
+      
+      // mark after select state
+      if (logStateIndex !== log.length) {
+        log = log.slice(0, logStateIndex+1);
+      }
+      // already market
+      if (this._getCellContent(x,y, log, logStateIndex) !== '') {
+        return;
+      }
+      // someone won
+      if (this._isWin(3, log) !== '') {
+        return;
+      }
+      //this.incrLogStateIndex(x,y);
+      logStateIndex+=1;
+      //this.writeToLog(x,y);
+      log = log.concat({x:x,y:y,player:player});
+      //this.changePlayer();
+      player = this.nextPlayer(player);
+      
+      return {
+        logStateIndex: logStateIndex,
+        log: log,
+        player: player,
+      };
+    });
   }
   
   writeToLog(x, y) {
@@ -235,11 +272,15 @@ class App extends React.Component {
   }
   
   getCellContent(x,y) {
+    return this._getCellContent(x,y, this.state.log, this.state.logStateIndex);
+  }
+  
+  _getCellContent(x,y, log, logStateIndex) {
     //for(let v of this.state.log) {
-    for(let i=0; i<this.state.log.length; i++) {
-      const v = this.state.log[i];
+    for(let i=0; i<log.length; i++) {
+      const v = log[i];
       /* console.log(v); */
-      if (v.x === x && v.y === y && i <= this.state.logStateIndex) {
+      if (v.x === x && v.y === y && i <= logStateIndex) {
         return v.player;
       }
     }
