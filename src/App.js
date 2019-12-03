@@ -45,7 +45,9 @@ class App extends React.Component {
   changeLogStateIndex(x,y) {
     this.setState((state, props) => {
       const logStateIndex = this._getCellIndex(x, y, state.log);
-      const player = this.nextPlayer(state.log[logStateIndex].player);
+      const player = (logStateIndex === -1)
+        ? 'x'
+        : this.nextPlayer(state.log[logStateIndex].player);
       console.log('changeLogStateIndex:', logStateIndex);
       return {
         logStateIndex: logStateIndex,
