@@ -44,8 +44,13 @@ class App extends React.Component {
   
   changeLogStateIndex(x,y) {
     this.setState((state, props) => {
-      console.log('changeLogStateIndex:', this.getCellIndex(x,y));
-      return {logStateIndex: this.getCellIndex(x,y)};
+      const logStateIndex = this.getCellIndex(x,y);
+      const player = this.nextPlayer(state.log[logStateIndex].player);
+      console.log('changeLogStateIndex:', logStateIndex);
+      return {
+        logStateIndex: logStateIndex,
+        player: player,
+      };
     });
   }
   
@@ -213,14 +218,20 @@ class App extends React.Component {
   }
 
   changePlayer() {
+    this.setState((state, props) => {
+      const player = this.nextPlayer(state.player);
+      console.log('changePlayer:', player);
+      return {player: player};
+    });
+  }
+  
+  nextPlayer(prevPlayer) {
     const players = {
       'x':'o',
       'o':'x',
+      '' :'x',
     };
-    this.setState((state, props) => {
-      console.log('changePlayer:', players[state.player]);
-      return {player: players[state.player]};
-    });
+    return players[prevPlayer];
   }
   
   getCellContent(x,y) {
