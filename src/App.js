@@ -1,6 +1,8 @@
 // game https://cdpn.io/gaearon/fullpage/gWWZgR?editors=0010
 // game + code https://codepen.io/gaearon/pen/gWWZgR?editors=0010
 
+'use strict';
+
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
