@@ -20,7 +20,6 @@ class Winner {
   }
 }
 
-const Player  = '';
 const PlayerX = 'X';
 const PlayerO = 'O';
 
@@ -89,21 +88,10 @@ class TicTacToeGame {
     return (this.lookup(position) !== null);
   }
 
-  getPlayer() {
-    const moves = this.getMovesIndex();
-    if (moves.length === 0) {
-      return Player;
-    }
-    return moves[moves.length-1].player;
-  }
-
   getNextPlayer() {
-    switch(this.getPlayer()) {
-      case Player  : return PlayerX;
-      case PlayerO : return PlayerX;
-      case PlayerX : return PlayerO;
-      default      : throw Error('player not support');
-    }
+    return this._index%2 === 1
+      ? PlayerO
+      : PlayerX;
   }
 
   lookup(position) {
