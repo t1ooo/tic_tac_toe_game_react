@@ -52,8 +52,6 @@ class TicTacToeGame {
     return this._moves.slice(0, this._index);
   }
 
-  getWinner() {}
-
   check(position) {
     if (position < 0 || this._getMaxPosition() < position) {
       throw new Error('bad n');
