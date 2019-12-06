@@ -134,13 +134,15 @@ class TicTacToeGame {
     for(let player in movesByPlayer) {  
       const g = movesByPlayer[player];
 
+      console.log(g['x'], g['y']);
+
       // vertical
-      if (this._isVerticalWin(g['x'], g['y'], max)) {
+      if (this._isVerticalWin(g['x'], max)) {
           return new Winner(player, 'vertical');
       }
       
       // horisontal
-      if (this._isHorisontalWin(g['x'], g['y'], max)) {
+      if (this._isHorisontalWin(g['y'], max)) {
           return new Winner(player, 'horisontal');
       }
       
@@ -158,37 +160,58 @@ class TicTacToeGame {
     return null;
   }
   
-  _isVerticalWin(xs, ys, max) {
+  /* _isVerticalWin(xs, ys, max) {
     return (
         this._isAllEqual(xs)
         && this._isAllIncr(ys, max)
     );
+  } */
+  /* _isVerticalWin(xs, max) {
+    const xs_uniq = arrayUnique(xs);
+    for(let v of xs_uniq) {
+      const count = arrayCountVal(xs, v);
+      if (count === max+1) {
+        return true;
+      }
+    }
+    return false;
+  } */
+  /* _isVerticalWin(xs, max) {
+    return arrayUnique(xs).some(v=>
+      (arrayCountVal(xs, v) === max+1)
+    );
+  } */
+  _isVerticalWin(xs, max) {
+    return arrayCountVals(xs).some(v=>(v.count === max+1));
   }
   
-  _isHorisontalWin(xs, ys, max) {
+  /* _isHorisontalWin(xs, ys, max) {
     return (
         this._isAllEqual(ys)
         && this._isAllIncr(xs, max)
     );
+  } */
+  _isHorisontalWin(ys, max) {
+    return this._isVerticalWin(ys, max);
   }
   
-  _isAllEqual(arr) {
+  /* _isAllEqual(arr) {
     return (
       arr.length !== 0
       && arr.every(v=>(v === arr[0]))
     );
-  }
+  } */
   
-  _isAllIncr(arr, max) {
+  /* _isAllIncr(arr, max) {
     for(let i=0; i<=max; i++) {
       if (arr.indexOf(i) === -1) {
         return false;
       }
     }
     return true;
-  }
+  } */
   
-  _isDiagonalLeftRightWin(xs, ys, max) {
+  /* _isDiagonalLeftRightWin(xs, ys, max) {
     for(let i=0; i<=max; i++) {
       if (
         xs.indexOf(i) === -1  
@@ -199,9 +222,22 @@ class TicTacToeGame {
       }
     }
     return true;
+  } */
+  _isDiagonalLeftRightWin(xs, ys, max) {
+      for(let n=0; n<=max; n++) {
+        if (
+          xs.indexOf(n) === -1  
+          || ys.indexOf(n) === -1 
+          /* || arrayIntersection(xs.indexOfAll(n), ys.indexOfAll(n)).length !== 0 */
+          || arrayIntersectIndexOf(xs, ys, n) === -1
+        ) {
+          return false;
+        }
+      }
+      return true;
   }
   
-  _isDiagonalRightLeftWin(xs, ys, max) {
+  /* _isDiagonalRightLeftWin(xs, ys, max) {
     for(let i=0,j=max; i<=max; i++,j--) {
       if (
         xs.indexOf(i) === -1  
@@ -212,7 +248,47 @@ class TicTacToeGame {
       }
     }
     return true;
+  } */
+  _isDiagonalRightLeftWin(xs, ys, max) {
+    return this._isDiagonalLeftRightWin(xs, arrayReverse(ys), max)
   }
+}
+
+function arrayUnique(arr) {
+  return Array.from(new Set(arr));
+}
+
+function arraySort(arr) {
+  const arrCopy = arr.slice();
+  arrCopy.sort();
+  return arrCopy;
+}
+
+function arrayReverse(arr) {
+  const arrCopy = arr.slice();
+  arrCopy.reverse();
+  return arrCopy;
+}
+
+function arrayCountVal(arr, val) {
+  return arr.filter(v=>(v===val)).length;
+}
+
+function arrayCountVals(arr) {
+  return arrayUnique(arr).map(v=>({
+      val: v,
+      count: arrayCountVal(arr, v),
+  }));
+}
+
+// return index of two arrays by value
+function arrayIntersectIndexOf(first_arr, second_arr, val) {
+  for(let i=0; i<=first_arr.length; i++) {
+    if (first_arr[i] === val && second_arr[i] === val) {
+      return i
+    }
+  }
+  return -1;
 }
 
 module.exports = {

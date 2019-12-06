@@ -49,15 +49,15 @@ class App extends React.Component {
     const winner = this.getWinner();
     return (winner === null) 
       ? <div>Next player: {this.getNextPlayer()}</div>
-      : <div>Winner: {winner.player}</div>;
+      : <div>Winner: {winner.player} ({winner.type})</div>;
   }
 
   table(n) {
     return (<table className="App-table">
         <tbody>
-          {[...Array(n)].map((_, x) => {
+          {[...Array(n)].map((_, y) => {
               return (<tr key={Math.random()}>
-                {[...Array(n)].map((_, y) =>
+                {[...Array(n)].map((_, x) =>
                   <td
                     key={Math.random()} 
                     onClick={this.check.bind(this, x, y)}
