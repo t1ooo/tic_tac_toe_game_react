@@ -19,7 +19,6 @@ class App extends React.Component {
     this.state = {
       game: new TicTacToeGame(this.size),
     };
-    //this.lookup(0,0);
   }
 
   render() {
@@ -44,10 +43,10 @@ class App extends React.Component {
       </div>
     );
   }
-  
+
   playerInfo() {
     const winner = this.getWinner();
-    return (winner === null) 
+    return (winner === null)
       ? <div>Next player: {this.getNextPlayer()}</div>
       : <div>Winner: {winner.player} ({winner.type})</div>;
   }
@@ -59,7 +58,7 @@ class App extends React.Component {
               return (<tr key={Math.random()}>
                 {[...Array(n)].map((_, x) =>
                   <td
-                    key={Math.random()} 
+                    key={Math.random()}
                     onClick={this.check.bind(this, x, y)}
                   >
                     {this.lookup(x, y)}
@@ -71,19 +70,19 @@ class App extends React.Component {
         </tbody>
     </table>);
   }
-  
+
   getMoves() {
     return this.state.game.getMoves();
   }
-  
+
   getNextPlayer() {
     return this.state.game.getNextPlayer();
   }
-  
+
   getWinner() {
     return this.state.game.getWinner();
   }
-  
+
   lookup(x, y) {
     const move = this.state.game.lookup(x, y);
     if (move === null) {
@@ -91,7 +90,7 @@ class App extends React.Component {
     }
     return this.state.game.lookup(x, y).player;
   }
-  
+
   goToMove(index) {
     this.setState((state, props) => {
       try {
@@ -101,9 +100,9 @@ class App extends React.Component {
       } catch(e) {
         console.log(e.message)
       }
-    }); 
+    });
   }
-  
+
   check(x, y) {
     console.log('check', x, y);
     this.setState((state, props) => {
