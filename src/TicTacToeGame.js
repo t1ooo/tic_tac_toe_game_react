@@ -1,9 +1,14 @@
 'use strict';
 
+/* board:
+    0 1 2
+    3 4 5
+    6 7 8
+*/
+
 class Move {
-  constructor(x, y, player) {
-    this.x = x;
-    this.y = y;
+  constructor(position, player) {
+    this.position = position;
     this.player = player;
   }
 }
@@ -50,12 +55,9 @@ class TicTacToeGame {
 
   getWinner() {}
 
-  check(x,y) {
-    if (x < 0 || this._size-1 < x) {
-      throw new Error('bad x');
-    }
-    if (y < 0 || this._size-1 < y) {
-      throw new Error('bad y');
+  check(position) {
+    if (position < 0 || this._getMaxPosition() < position) {
+      throw new Error('bad n');
     }
     if (this._moves.length !== this._index) {
       this._trucnateMoves();
@@ -63,24 +65,28 @@ class TicTacToeGame {
     if (this.getWinner() !== null) {
       throw new Error('game over');
     }
-    if (this.isChecked(x,y)) {
+    if (this.isChecked(position)) {
       throw new Error('already checked');
     }
     const player = this.getNextPlayer();
-    this._check(x, y, player);
+    this._check(position, player);
+  }
+
+  _getMaxPosition() {
+    return (this._size * this._size) - 1;
   }
 
   _trucnateMoves() {
     this._moves = this.getMovesIndex();
   }
 
-  _check(x, y, player) {
-    this._moves.push(new Move(x, y, player));
+  _check(position, player) {
+    this._moves.push(new Move(position, player));
     this._index++;
   }
 
-  isChecked(x,y) {
-    return (this.lookup(x,y) !== null);
+  isChecked(position) {
+    return (this.lookup(position) !== null);
   }
 
   getPlayer() {
@@ -100,54 +106,48 @@ class TicTacToeGame {
     }
   }
 
-  lookup(x,y) {
+  lookup(position) {
     const moves = this.getMovesIndex();
     for(let i=0; i<moves.length; i++) {
       const move = moves[i];
-      if (x === move.x && y === move.y) {
+      if (position === move.position) {
         return move;
       }
     }
     return null;
   }
 
-  /*
-    vertical:              0 1, 0 2, ..., x   y+1
-    horisontal:            0 0, 1 0, ..., x+1 y
-    diagonal left right:   0 0, 1 1, ..., x+1 y+1
-    diagonal right left:   3 0, 2 1, ..., x-1 y+1
-  */
   getWinner() {
     const movesByPlayer = {};
-    movesByPlayer[PlayerX] = {'x':[],'y':[]};
-    movesByPlayer[PlayerO] = {'x':[],'y':[]};
+    movesByPlayer[PlayerX] = [];
+    movesByPlayer[PlayerO] = [];
 
     const moves = this.getMovesIndex();
     for(let i=0; i<moves.length; i++) {
       const move = moves[i];
-      movesByPlayer[move.player]['x'].push(move.x);
-      movesByPlayer[move.player]['y'].push(move.y);
+      movesByPlayer[move.player].push(move.position);
+      movesByPlayer[move.player].push(move.position);
     }
 
     const max = this._size-1;
     for(let player in movesByPlayer) {
-      const g = movesByPlayer[player];
+      const positions = movesByPlayer[player];
 
-      console.log(g['x'], g['y']);
+      console.log(positions);
 
-      if (this._isVerticalWin(g['x'], max)) {
-          return new Winner(player, 'vertical');
+      if (this._isVerticalWin(positions, this._size)) {
+        return new Winner(player, 'vertical');
       }
 
-      if (this._isHorisontalWin(g['y'], max)) {
-          return new Winner(player, 'horisontal');
+      if (this._isHorisontalWin(positions, this._size)) {
+        return new Winner(player, 'horisontal');
       }
 
-      if (this._isDiagonalLeftRightWin(g['x'], g['y'], max)) {
+      if (this._isDiagonalLeftRightWin(positions, this._size)) {
         return new Winner(player, 'diagonal lefr right');
       }
 
-      if (this._isDiagonalRightLeftWin(g['x'], g['y'], max)) {
+      if (this._isDiagonalRightLeftWin(positions, this._size)) {
         return new Winner(player, 'diagonal right lefr');
       }
     }
@@ -155,67 +155,54 @@ class TicTacToeGame {
     return null;
   }
 
-  _isVerticalWin(xs, max) {
-    return arrayCountVals(xs).some(v=>(v.count === max+1));
+  _isHorisontalWin(positions, size) {
+    return arrayRange(0, 1, size).some(rowNum=>
+      arrayIncludesAll(positions, this._getRowVals(rowNum, size))
+    );
   }
 
-  _isHorisontalWin(ys, max) {
-    return this._isVerticalWin(ys, max);
+  _isVerticalWin(positions, size) {
+    return arrayRange(0, 1, size).some(colNum=>
+      arrayIncludesAll(positions, this._getColVals(colNum, size))
+    );
   }
 
-  _isDiagonalLeftRightWin(xs, ys, max) {
-      for(let n=0; n<=max; n++) {
-        if (
-          xs.indexOf(n) === -1
-          || ys.indexOf(n) === -1
-          || arrayIntersectIndexOf(xs, ys, n) === -1
-        ) {
-          return false;
-        }
-      }
-      return true;
+  _isDiagonalLeftRightWin(positions, size) {
+    return arrayIncludesAll(positions, this._getDiagonalLeftRightVals(size))
   }
 
-  _isDiagonalRightLeftWin(xs, ys, max) {
-    return this._isDiagonalLeftRightWin(xs, arrayReverse(ys), max)
+  _isDiagonalRightLeftWin(positions, size) {
+    return arrayIncludesAll(positions, this._getDiagonalRightLeftVals(size))
+  }
+
+  _getRowVals(rowNum, size) {
+    return arrayRange((rowNum*size), 1, size);
+  }
+
+  _getColVals(colNum, size) {
+    return arrayRange(colNum, size, size);
+  }
+
+  _getDiagonalLeftRightVals(size) {
+    return arrayRange(0, size+1, size);
+  }
+
+  _getDiagonalRightLeftVals(size) {
+    return arrayRange(size-1, size-1, size);
   }
 }
 
-function arrayUnique(arr) {
-  return Array.from(new Set(arr));
-}
-
-function arraySort(arr) {
-  const arrCopy = arr.slice();
-  arrCopy.sort();
-  return arrCopy;
-}
-
-function arrayReverse(arr) {
-  const arrCopy = arr.slice();
-  arrCopy.reverse();
-  return arrCopy;
-}
-
-function arrayCountVal(arr, val) {
-  return arr.filter(v=>(v===val)).length;
-}
-
-function arrayCountVals(arr) {
-  return arrayUnique(arr).map(v=>({
-      val: v,
-      count: arrayCountVal(arr, v),
-  }));
-}
-
-// return index of two arrays by value
-function arrayIntersectIndexOf(first_arr, second_arr, val) {
-  for(let i=0; i<=first_arr.length; i++) {
-    if (first_arr[i] === val && second_arr[i] === val) {
-      return i
-    }
+function arrayRange(start, step, length) {
+  const arr = [];
+  for(let i=0; i<length; i++) {
+    arr.push(start);
+    start+=step;
   }
-  return -1;
+  return arr
+}
+
+function arrayIncludesAll(arr, vals) {
+  return vals.every(v=>arr.includes(v));
 }
 
 module.exports = {
