@@ -6,13 +6,19 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {TicTacToeGame} from './TicTacToeGame';
+import {TicTacToeGame, Move, Winner} from './TicTacToeGame';
+import PropTypes from 'prop-types';
 
 function clone(original) {
   return Object.assign(Object.create(original), original);
 }
 
 class Board extends React.Component {
+  static propTypes = {
+    size: PropTypes.number.isRequired,
+    check: PropTypes.func.isRequired,
+    lookup: PropTypes.func.isRequired,
+  };
   render () {
     const size = this.props.size;
     return (
@@ -41,6 +47,10 @@ class Board extends React.Component {
 }
 
 class History extends React.Component {
+  static propTypes = {
+    moves: PropTypes.arrayOf(PropTypes.instanceOf(Move)).isRequired,
+    goToMove: PropTypes.func.isRequired,
+  };
   render() {
     return (
       <div>
@@ -60,6 +70,13 @@ class History extends React.Component {
 }
 
 class Info extends React.Component {
+  static propTypes = {
+    //winner: PropTypes.instanceOf(Winner).isRequired,
+    //winner: PropTypes.oneOfType([PropTypes.instanceOf(Winner)]).isRequired,
+    //winner: nullableInstanceOf(Winner),
+    winner: PropTypes.instanceOf(Winner),
+    nextPlayer: PropTypes.string.isRequired,
+  };
   render() {
     const winner = this.props.winner;
     return (winner === null)
@@ -67,6 +84,16 @@ class Info extends React.Component {
       : <div>Winner: {winner.player} / {winner.type}</div>;
   }
 }
+
+// Warning: Failed prop type: The prop `winner` is marked as required in `Info`, but its value is `null`.
+/* function nullableInstanceOf(classname) {
+  return function(props, propName, componentName) {
+    if (props[propName] === null || props[propName] instanceof classname) {
+      return;
+    }
+    return new Error(`The prop ${componentName}.${propName} is not valid.`);
+  };
+} */
 
 class App extends React.Component {
   constructor(props) {
