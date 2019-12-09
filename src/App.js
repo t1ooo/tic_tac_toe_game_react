@@ -12,6 +12,62 @@ function clone(original) {
   return Object.assign(Object.create(original), original);
 }
 
+class Board extends React.Component {
+  render () {
+    const size = this.props.size;
+    return (
+      <table className="App-table">
+          <tbody>
+            {arrayRange(0, size, size).map(x => {
+                return (
+                  <tr key={x}>
+                    {arrayRange(0, 1, size).map(y =>
+                      <td
+                        key={x+y}
+                        position={x+y}
+                        onClick={i=>this.props.check(x+y)}
+                      >
+                        {this.props.lookup(x+y)}
+                      </td>
+                    )}
+                  </tr>
+                );
+              }
+            )}
+          </tbody>
+      </table>
+    );
+  }
+}
+
+class History extends React.Component {
+  render() {
+    return (
+      <div>
+        <li key={0}>
+          <button onClick={i=>this.props.goToMove(0)}>Go to game start</button>
+        </li>
+        {this.props.moves.map((v,k)=>
+          <li key={k+1}>
+            <button onClick={i=>this.props.goToMove(k+1)}>
+              Go to move {k+1}: p{v.position} = {v.player}
+            </button>
+          </li>
+        )}
+      </div>
+    );
+  }
+}
+
+class Info extends React.Component {
+  render() {
+    const winner = this.props.winner;
+    return (winner === null)
+      ? <div>Next player: {this.props.nextPlayer}</div>
+      : <div>Winner: {winner.player} / {winner.type}</div>;
+  }
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -24,55 +80,22 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-          {this.table(this.size)}
-          <div>
-            {this.playerInfo()}
-            <div>
-              <li key={Math.random()}>
-                <button onClick={this.goToMove.bind(this, 0)}>Go to game start</button>
-              </li>
-              {this.getMoves().map((v,k)=>
-                <li key={Math.random()}>
-                  <button onClick={this.goToMove.bind(this, k+1)}>
-                    Go to move {k+1}: p{v.position} = {v.player}
-                  </button>
-                </li>
-              )}
-            </div>
+          <Board
+            size={this.size}
+            check={i=>this.check(i)}
+            lookup={i=>this.lookup(i)}
+          />
+         <div>
+            <Info
+              winner={this.getWinner()}
+              nextPlayer={this.getNextPlayer()}
+            />
+            <History
+              goToMove={i=>this.goToMove(i)}
+              moves={this.getMoves()}
+            />
           </div>
       </div>
-    );
-  }
-
-  playerInfo() {
-    const winner = this.getWinner();
-    return (winner === null)
-      ? <div>Next player: {this.getNextPlayer()}</div>
-      : <div>Winner: {winner.player} / {winner.type}</div>;
-  }
-
-  table(size) {
-    return (
-      <table className="App-table">
-          <tbody>
-            {arrayRange(0, size, size).map(x => {
-                return (
-                  <tr key={Math.random()}>
-                    {arrayRange(0, 1, size).map(y =>
-                      <td
-                        key={Math.random()}
-                        position={x+y}
-                        onClick={this.check.bind(this, x+y)}
-                      >
-                        {this.lookup(x+y)}
-                      </td>
-                    )}
-                  </tr>
-                );
-              }
-            )}
-          </tbody>
-      </table>
     );
   }
 
