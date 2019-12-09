@@ -71,9 +71,6 @@ class History extends React.Component {
 
 class Info extends React.Component {
   static propTypes = {
-    //winner: PropTypes.instanceOf(Winner).isRequired,
-    //winner: PropTypes.oneOfType([PropTypes.instanceOf(Winner)]).isRequired,
-    //winner: nullableInstanceOf(Winner),
     winner: PropTypes.instanceOf(Winner),
     nextPlayer: PropTypes.string.isRequired,
   };
@@ -84,16 +81,6 @@ class Info extends React.Component {
       : <div>Winner: {winner.player} / {winner.type}</div>;
   }
 }
-
-// Warning: Failed prop type: The prop `winner` is marked as required in `Info`, but its value is `null`.
-/* function nullableInstanceOf(classname) {
-  return function(props, propName, componentName) {
-    if (props[propName] === null || props[propName] instanceof classname) {
-      return;
-    }
-    return new Error(`The prop ${componentName}.${propName} is not valid.`);
-  };
-} */
 
 class App extends React.Component {
   constructor(props) {
