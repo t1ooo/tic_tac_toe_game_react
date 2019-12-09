@@ -192,5 +192,7 @@ function arrayIncludesAll(arr, vals) {
 }
 
 module.exports = {
-  TicTacToeGame:TicTacToeGame,
+  TicTacToeGame: TicTacToeGame,
+  Move: Move,
+  Winner: Winner,
 };
