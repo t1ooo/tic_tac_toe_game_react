@@ -18,6 +18,7 @@ class BoardItem extends React.Component {
     check: PropTypes.func.isRequired,
     lookup: PropTypes.func.isRequired,
   };
+
   render () {
     return (
       <div
@@ -35,34 +36,37 @@ class Board extends React.Component {
     check: PropTypes.func.isRequired,
     lookup: PropTypes.func.isRequired,
   };
+
   render () {
     const size = this.props.size;
     return (
       <table className="App-table">
           <tbody>
-            {arrayRange(0, size, size).map(x=>this.tr(x))}
+            {arrayRange(0, size, size).map(x => this.tr(x))}
           </tbody>
       </table>
     );
   }
+
   tr(x) {
     const size = this.props.size;
     return (
-      <tr 
+      <tr
         key={x}
       >
-        {arrayRange(0, 1, this.props.size).map(y=>this.td(x+y))}
+        {arrayRange(0, 1, this.props.size).map(y => this.td(x+y))}
       </tr>
     );
   }
+
   td(position) {
     return (
-      <td 
+      <td
         key={position}
       >
-        <BoardItem 
-          check={_=>this.props.check(position)}
-          lookup={_=>this.props.lookup(position)}
+        <BoardItem
+          check={_ => this.props.check(position)}
+          lookup={_ => this.props.lookup(position)}
         />
       </td>
     );
@@ -74,6 +78,7 @@ class HistoryItem extends React.Component {
     goToMove: PropTypes.func.isRequired,
     content: PropTypes.string.isRequired,
   };
+
   render() {
     return (
       <button onClick={this.props.goToMove}>
@@ -88,19 +93,20 @@ class History extends React.Component {
     moves: PropTypes.arrayOf(PropTypes.instanceOf(Move)).isRequired,
     goToMove: PropTypes.func.isRequired,
   };
+
   render() {
     return (
       <div>
         <li key={0}>
-          <HistoryItem 
-            goToMove={_=>this.props.goToMove(0)} 
+          <HistoryItem
+            goToMove={_ => this.props.goToMove(0)}
             content="Go to game start"
           />
         </li>
-        {this.props.moves.map((v,k)=>
+        {this.props.moves.map((v,k) =>
           <li key={k+1}>
-            <HistoryItem 
-              goToMove={_=>this.props.goToMove(k+1)} 
+            <HistoryItem
+              goToMove={_ => this.props.goToMove(k+1)}
               content={`Go to move ${k+1}: p${v.position} = ${v.player}`}
             />
           </li>
@@ -115,6 +121,7 @@ class Info extends React.Component {
     winner: PropTypes.instanceOf(Winner),
     nextPlayer: PropTypes.string.isRequired,
   };
+
   render() {
     const winner = this.props.winner;
     return (winner === null)
@@ -137,8 +144,8 @@ class App extends React.Component {
       <div className="App">
           <Board
             size={this.size}
-            check={i=>this.check(i)}
-            lookup={i=>this.lookup(i)}
+            check={i => this.check(i)}
+            lookup={i => this.lookup(i)}
           />
          <div>
             <Info
@@ -146,7 +153,7 @@ class App extends React.Component {
               nextPlayer={this.getNextPlayer()}
             />
             <History
-              goToMove={i=>this.goToMove(i)}
+              goToMove={i => this.goToMove(i)}
               moves={this.getMoves()}
             />
           </div>
