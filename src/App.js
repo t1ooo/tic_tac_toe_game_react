@@ -40,28 +40,31 @@ class Board extends React.Component {
     return (
       <table className="App-table">
           <tbody>
-            {arrayRange(0, size, size).map(x => {
-                return (
-                  <tr key={x}>
-                    {arrayRange(0, 1, size).map(y => {
-                      const position = x + y;
-                      return (
-                        <td 
-                          key={position}
-                        >
-                          <BoardItem 
-                            check={_=>this.props.check(position)}
-                            lookup={_=>this.props.lookup(position)}
-                          />
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              }
-            )}
+            {arrayRange(0, size, size).map(x=>this.tr(x))}
           </tbody>
       </table>
+    );
+  }
+  tr(x) {
+    const size = this.props.size;
+    return (
+      <tr 
+        key={x}
+      >
+        {arrayRange(0, 1, this.props.size).map(y=>this.td(x+y))}
+      </tr>
+    );
+  }
+  td(position) {
+    return (
+      <td 
+        key={position}
+      >
+        <BoardItem 
+          check={_=>this.props.check(position)}
+          lookup={_=>this.props.lookup(position)}
+        />
+      </td>
     );
   }
 }
