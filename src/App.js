@@ -15,19 +15,15 @@ function clone(original) {
 
 class BoardItem extends React.Component {
   static propTypes = {
-    position: PropTypes.number.isRequired,
     check: PropTypes.func.isRequired,
     lookup: PropTypes.func.isRequired,
   };
   render () {
-    const position = this.props.position;
     return (
       <div
-        key={position}
-        position={position}
-        onClick={_=>this.props.check(position)}
+        onClick={this.props.check}
       >
-        {this.props.lookup(position)}
+        {this.props.lookup()}
       </div>
     );
   }
@@ -47,15 +43,19 @@ class Board extends React.Component {
             {arrayRange(0, size, size).map(x => {
                 return (
                   <tr key={x}>
-                    {arrayRange(0, 1, size).map(y =>
-                      <td key={x+y}>
-                        <BoardItem 
-                          position={x+y} 
-                          check={this.props.check}
-                          lookup={this.props.lookup}
-                        />
-                      </td>
-                    )}
+                    {arrayRange(0, 1, size).map(y => {
+                      const position = x + y;
+                      return (
+                        <td 
+                          key={position}
+                        >
+                          <BoardItem 
+                            check={_=>this.props.check(position)}
+                            lookup={_=>this.props.lookup(position)}
+                          />
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               }
