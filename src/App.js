@@ -66,6 +66,20 @@ class Board extends React.Component {
   }
 }
 
+class HistoryItem extends React.Component {
+  static propTypes = {
+    goToMove: PropTypes.func.isRequired,
+    content: PropTypes.string.isRequired,
+  };
+  render() {
+    return (
+      <button onClick={this.props.goToMove}>
+        {this.props.content}
+      </button>
+    );
+  }
+}
+
 class History extends React.Component {
   static propTypes = {
     moves: PropTypes.arrayOf(PropTypes.instanceOf(Move)).isRequired,
@@ -75,13 +89,17 @@ class History extends React.Component {
     return (
       <div>
         <li key={0}>
-          <button onClick={i=>this.props.goToMove(0)}>Go to game start</button>
+          <HistoryItem 
+            goToMove={_=>this.props.goToMove(0)} 
+            content="Go to game start"
+          />
         </li>
         {this.props.moves.map((v,k)=>
           <li key={k+1}>
-            <button onClick={i=>this.props.goToMove(k+1)}>
-              Go to move {k+1}: p{v.position} = {v.player}
-            </button>
+            <HistoryItem 
+              goToMove={_=>this.props.goToMove(k+1)} 
+              content={`Go to move ${k+1}: p${v.position} = ${v.player}`}
+            />
           </li>
         )}
       </div>
