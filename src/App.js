@@ -13,6 +13,26 @@ function clone(original) {
   return Object.assign(Object.create(original), original);
 }
 
+class BoardItem extends React.Component {
+  static propTypes = {
+    position: PropTypes.number.isRequired,
+    check: PropTypes.func.isRequired,
+    lookup: PropTypes.func.isRequired,
+  };
+  render () {
+    const position = this.props.position;
+    return (
+      <div
+        key={position}
+        position={position}
+        onClick={_=>this.props.check(position)}
+      >
+        {this.props.lookup(position)}
+      </div>
+    );
+  }
+}
+
 class Board extends React.Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
@@ -28,12 +48,12 @@ class Board extends React.Component {
                 return (
                   <tr key={x}>
                     {arrayRange(0, 1, size).map(y =>
-                      <td
-                        key={x+y}
-                        position={x+y}
-                        onClick={i=>this.props.check(x+y)}
-                      >
-                        {this.props.lookup(x+y)}
+                      <td key={x+y}>
+                        <BoardItem 
+                          position={x+y} 
+                          check={this.props.check}
+                          lookup={this.props.lookup}
+                        />
                       </td>
                     )}
                   </tr>
