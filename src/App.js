@@ -13,7 +13,7 @@ function clone(original) {
   return Object.assign(Object.create(original), original);
 }
 
-class BoardItem extends React.Component {
+export class BoardItem extends React.Component {
   static propTypes = {
     check: PropTypes.func.isRequired,
     lookup: PropTypes.func.isRequired,
@@ -30,7 +30,7 @@ class BoardItem extends React.Component {
   }
 }
 
-class Board extends React.Component {
+export class Board extends React.Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
     check: PropTypes.func.isRequired,
@@ -73,7 +73,7 @@ class Board extends React.Component {
   }
 }
 
-class HistoryItem extends React.Component {
+export class HistoryItem extends React.Component {
   static propTypes = {
     goToMove: PropTypes.func.isRequired,
     content: PropTypes.string.isRequired,
@@ -88,7 +88,7 @@ class HistoryItem extends React.Component {
   }
 }
 
-class History extends React.Component {
+export class History extends React.Component {
   static propTypes = {
     moves: PropTypes.arrayOf(PropTypes.instanceOf(Move)).isRequired,
     goToMove: PropTypes.func.isRequired,
@@ -116,7 +116,7 @@ class History extends React.Component {
   }
 }
 
-class Info extends React.Component {
+export class Info extends React.Component {
   static propTypes = {
     winner: PropTypes.instanceOf(Winner),
     nextPlayer: PropTypes.string.isRequired,
@@ -130,7 +130,7 @@ class Info extends React.Component {
   }
 }
 
-class App extends React.Component {
+export class App extends React.Component {
   constructor(props) {
     super(props);
     this.size = 3;
@@ -216,4 +216,4 @@ function arrayRange(start, step, length) {
   return arr
 }
 
-export default App;
+/* export default App; */
