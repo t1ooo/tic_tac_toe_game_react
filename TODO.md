@@ -29,4 +29,4 @@
 ? заменить лямбды на функции
 - отцентрировать x o
 + убрать BoardItem.position
-+ отрефакторить Board
++ отрефакторить Board+ setState без clone

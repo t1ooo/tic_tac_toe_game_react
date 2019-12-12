@@ -9,10 +9,6 @@ import './App.css';
 import {TicTacToeGame, Move, Winner} from './TicTacToeGame';
 import PropTypes from 'prop-types';
 
-function clone(original) {
-  return Object.assign(Object.create(original), original);
-}
-
 export class BoardItem extends React.Component {
   static propTypes = {
     check: PropTypes.func.isRequired,
@@ -184,9 +180,8 @@ export default class App extends React.Component {
   goToMove(index) {
     this.setState((state, props) => {
       try {
-        const game = clone(state.game);
-        game.goToMove(index);
-        return {game: game};
+        state.game.goToMove(index);
+        return {game: state.game};
       } catch(e) {
         console.log(e.message)
       }
@@ -197,9 +192,8 @@ export default class App extends React.Component {
     console.log('check', position);
     this.setState((state, props) => {
       try {
-        const game = clone(state.game);
-        game.check(position);
-        return {game: game};
+        state.game.check(position);
+        return {game: state.game};
       } catch(e) {
         console.log(e.message)
       }
