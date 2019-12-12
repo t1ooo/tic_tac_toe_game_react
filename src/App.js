@@ -174,7 +174,7 @@ export default class App extends React.Component {
     if (move === null) {
       return '';
     }
-    return this.state.game.lookup(position).player;
+    return move.player;
   }
 
   goToMove(index) {

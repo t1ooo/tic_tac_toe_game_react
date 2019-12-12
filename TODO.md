@@ -29,4 +29,6 @@
 ? заменить лямбды на функции
 - отцентрировать x o
 + убрать BoardItem.position
-+ отрефакторить Board+ setState без clone
++ отрефакторить Board
++ setState без clone
++ удалить дублирование кода в App.lookup
