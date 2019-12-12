@@ -143,7 +143,7 @@ export class App extends React.Component {
             check={i => this.check(i)}
             lookup={i => this.lookup(i)}
           />
-         <div>
+          <div>
             <Info
               winner={this.getWinner()}
               nextPlayer={this.getNextPlayer()}
