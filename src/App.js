@@ -130,7 +130,7 @@ export class Info extends React.Component {
   }
 }
 
-export class App extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.size = 3;
