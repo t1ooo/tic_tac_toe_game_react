@@ -36,7 +36,7 @@ export class Board extends React.Component {
   render () {
     const size = this.props.size;
     return (
-      <table className="App-table">
+      <table>
           <tbody>
             {arrayRange(0, size, size).map(x => this.tr(x))}
           </tbody>
