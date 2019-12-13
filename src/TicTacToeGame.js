@@ -126,15 +126,15 @@ class TicTacToeGame {
       }
 
       if (this._isHorisontalWin(positions, this._size)) {
-        return new Winner(player, 'horisontal');
+        return new Winner(player, 'horizontal');
       }
 
       if (this._isDiagonalLeftRightWin(positions, this._size)) {
-        return new Winner(player, 'diagonal lefr right');
+        return new Winner(player, 'diagonal left right');
       }
 
       if (this._isDiagonalRightLeftWin(positions, this._size)) {
-        return new Winner(player, 'diagonal right lefr');
+        return new Winner(player, 'diagonal right left');
       }
     }
 
