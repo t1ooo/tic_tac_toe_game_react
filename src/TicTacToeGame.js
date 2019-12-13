@@ -7,9 +7,9 @@
 */
 
 class Move {
-  constructor(position, player) {
-    this.position = position;
+  constructor(player, position) {
     this.player = player;
+    this.position = position;
   }
 }
 
@@ -78,7 +78,7 @@ class TicTacToeGame {
   }
 
   _check(position, player) {
-    this._moves.push(new Move(position, player));
+    this._moves.push(new Move(player, position));
     this._index++;
   }
 
