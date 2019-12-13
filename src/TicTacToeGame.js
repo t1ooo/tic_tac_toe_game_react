@@ -54,7 +54,7 @@ class TicTacToeGame {
 
   check(position) {
     if (position < 0 || this._getMaxPosition() < position) {
-      throw new Error('bad n');
+      throw new Error('bad position');
     }
     if (this._moves.length !== this._index) {
       this._trucnateMoves();
