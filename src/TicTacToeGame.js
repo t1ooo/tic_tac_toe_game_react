@@ -48,7 +48,7 @@ class TicTacToeGame {
 
   /* TODO: change name? */
   // return all moves up to current index
-  getMovesIndex() {
+  _getMovesWithIndex() {
     return this._moves.slice(0, this._index);
   }
 
@@ -74,7 +74,7 @@ class TicTacToeGame {
   }
 
   _trucnateMoves() {
-    this._moves = this.getMovesIndex();
+    this._moves = this._getMovesWithIndex();
   }
 
   _check(position, player) {
@@ -93,7 +93,7 @@ class TicTacToeGame {
   }
 
   lookup(position) {
-    const moves = this.getMovesIndex();
+    const moves = this._getMovesWithIndex();
     for(let i=0; i<moves.length; i++) {
       const move = moves[i];
       if (position === move.position) {
@@ -108,7 +108,7 @@ class TicTacToeGame {
     movesByPlayer[PlayerX] = [];
     movesByPlayer[PlayerO] = [];
 
-    const moves = this.getMovesIndex();
+    const moves = this._getMovesWithIndex();
     for(let i=0; i<moves.length; i++) {
       const move = moves[i];
       movesByPlayer[move.player].push(move.position);
