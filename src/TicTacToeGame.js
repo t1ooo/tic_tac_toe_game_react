@@ -115,7 +115,6 @@ class TicTacToeGame {
       movesByPlayer[move.player].push(move.position);
     }
 
-    const max = this._size-1;
     for(let player in movesByPlayer) {
       const positions = movesByPlayer[player];
 
