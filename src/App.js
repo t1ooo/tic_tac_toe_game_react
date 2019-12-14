@@ -48,7 +48,7 @@ export class Board extends React.Component {
       <tr
         key={x}
       >
-        {arrayRange(0, 1, this.props.size).map(y => this.td(x+y))}
+        {arrayRange(0, 1, size).map(y => this.td(x+y))}
       </tr>
     );
   }
