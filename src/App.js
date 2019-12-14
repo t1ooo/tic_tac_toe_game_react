@@ -197,6 +197,7 @@ export class App extends React.Component {
             case 'GameOverError':
             case 'CheckedError':
               console.log(e.message);
+              break;
             default:
               throw e;
         }
