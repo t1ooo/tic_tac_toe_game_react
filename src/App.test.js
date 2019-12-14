@@ -20,7 +20,7 @@ afterEach(() => {
   container = null;
 });
 
-it('renders without crashing', () => {
+it('renders App', () => {
   render(<App />, container);
 });
 
@@ -72,7 +72,7 @@ it('renders HistoryItem', () => {
 });
 
 it('renders History', () => {
-  const goToMove = jest.fn();
+  const goToMove = jest.fn(x=>x);
   const moves = [new Move('X', 0), new Move('O', 0)];
 
   act(() => {
@@ -87,12 +87,15 @@ it('renders History', () => {
 
   const buttons = container.querySelectorAll('button');
   act(() => {
-    buttons.forEach(v=>
-      v.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+    buttons.forEach(x=>
+      x.dispatchEvent(new MouseEvent('click', {bubbles: true}))
     );
   });
 
   expect(goToMove).toHaveBeenCalledTimes(buttons.length);
+  goToMove.mock.calls.forEach((call,i)=>
+    expect(call[0]).toBe(i)
+  );
   expect(buttons.length).toBe(moves.length + 1);
 });
 
