@@ -20,11 +20,31 @@ it('new instance with bad size', () => {
   }).toThrow(RangeError);
 });
 
+it('getCurrentMove after check', () => {
+  const game = defaultTicTacToeGame();
+  expect(game.getCurrentMove()).toBe(0);
+  game.check(0);
+  expect(game.getCurrentMove()).toBe(1);
+  game.check(1);
+  expect(game.getCurrentMove()).toBe(2);
+});
+
+it('getCurrentMove after goToMove', () => {
+  const game = defaultTicTacToeGame();
+  game.check(0);  
+  game.check(1);  
+  game.goToMove(0);
+  expect(game.getCurrentMove()).toBe(0);
+});
+
 it('goToMove', () => {
   const game = defaultTicTacToeGame();
+  
   game.goToMove(0);
   game.check(0);
+  
   game.goToMove(1);
+  game.check(1);
 });
 
 it('goToMove with bad index', () => {
@@ -32,6 +52,21 @@ it('goToMove with bad index', () => {
   expect(() => {
     game.goToMove(1);
   }).toThrow(RangeError);
+});
+
+it('getMoves', () => {
+  const game = defaultTicTacToeGame();
+  game.check(0);
+  game.check(1);
+  expect(game.getMoves()).toStrictEqual([new Move('X', 0),new Move('O', 1)]);
+});
+
+it('getMoves after goToMove', () => {
+  const game = defaultTicTacToeGame();
+  game.check(0);
+  game.check(1);
+  game.goToMove(0);
+  expect(game.getMoves()).toStrictEqual([new Move('X', 0),new Move('O', 1)]);
 });
 
 it('check', () => {
@@ -68,6 +103,19 @@ it('check when game over', () => {
   expect(() => {
     game.check(7);
   }).toThrow(GameOverError);
+});
+
+it('check after goToMove', () => {
+  const game = defaultTicTacToeGame();
+  game.check(0); 
+  game.check(1);
+  game.check(2);
+  
+  game.goToMove(0);
+  
+  game.check(0); 
+  game.check(1);
+  game.check(2);
 });
 
 it('isChecked', () => {
