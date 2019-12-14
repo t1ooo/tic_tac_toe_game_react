@@ -110,6 +110,16 @@ it('lookup', () => {
   expect(game.lookup(1)).toStrictEqual(new Move('O', 1));
 });
 
+it('lookup with bad position', () => { 
+  const game = defaultTicTacToeGame();
+  expect(() => {
+    game.lookup(-1);
+  }).toThrow(RangeError);
+  expect(() => {
+    game.lookup(MAX_POSITION + 1);
+  }).toThrow(RangeError);
+});
+
 it('winner vertical', () => { 
   const positions = [
     //X  O
