@@ -2,7 +2,6 @@
 // game + code https://codepen.io/gaearon/pen/gWWZgR?editors=0010
 
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { TicTacToeGame, Move, Winner, GameOverError, CheckedError } from './TicTacToeGame';
 import PropTypes from 'prop-types';
