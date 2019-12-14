@@ -20,19 +20,12 @@ afterEach(() => {
   container = null;
 });
 
-/* it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
-}); */
 it('renders without crashing', () => {
   render(<App />, container);
 });
 
 it('renders BoardItem', () => {
-  //var checked = false;
   const position = '42';
-  //const check = (position) => {checked = !checked};
   const check = jest.fn();
   const lookup = () => position;
 
@@ -51,7 +44,6 @@ it('renders BoardItem', () => {
     div.dispatchEvent(new MouseEvent('click', {bubbles: true}));
   });
 
-  //expect(checked).toBeTruthy();
   expect(check).toHaveBeenCalledTimes(1);
   expect(container.textContent).toBe(position);
 });
