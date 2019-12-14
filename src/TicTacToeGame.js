@@ -18,24 +18,24 @@ export class CheckedError extends Error {
   }
 }
 
-class Move {
+export class Move {
   constructor(player, position) {
     this.player = player;
     this.position = position;
   }
 }
 
-class Winner {
+export class Winner {
   constructor(player, type) {
     this.player = player;
     this.type = type;
   }
 }
 
-const PlayerX = 'X';
-const PlayerO = 'O';
+export const PlayerX = 'X';
+export const PlayerO = 'O';
 
-class TicTacToeGame {
+export class TicTacToeGame {
   constructor(size) {
     if (size < 0) {
       throw new RangeError('bad size');
@@ -201,9 +201,3 @@ function arrayRange(start, step, length) {
 function arrayIncludesAll(arr, vals) {
   return vals.every(v=>arr.includes(v));
 }
-
-module.exports = {
-  TicTacToeGame: TicTacToeGame,
-  Move: Move,
-  Winner: Winner,
-};
