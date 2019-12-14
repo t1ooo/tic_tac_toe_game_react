@@ -4,6 +4,20 @@
     6 7 8
 */
 
+export class GameOverError extends Error {
+  constructor(...args) {
+    super(...args);
+    this.name = "GameOverError";
+  }
+}
+
+export class CheckedError extends Error {
+  constructor(...args) {
+    super(...args);
+    this.name = "CheckedError";
+  }
+}
+
 class Move {
   constructor(player, position) {
     this.player = player;
@@ -24,7 +38,7 @@ const PlayerO = 'O';
 class TicTacToeGame {
   constructor(size) {
     if (size < 0) {
-      throw new Error('bad size');
+      throw new RangeError('bad size');
     }
     this._size = size;
     this._player = '';
@@ -34,7 +48,7 @@ class TicTacToeGame {
 
   goToMove(index) {
     if (index < 0 || this._moves.length < index) {
-      throw new Error('bad index');
+      throw new RangeError('bad index');
     }
     this._index = index;
   }
@@ -52,16 +66,16 @@ class TicTacToeGame {
 
   check(position) {
     if (position < 0 || this._getMaxPosition() < position) {
-      throw new Error('bad position');
+      throw new RangeError('bad position');
     }
     if (this._moves.length !== this._index) {
       this._trucnateMoves();
     }
     if (this.getWinner() !== null) {
-      throw new Error('game over');
+      throw new GameOverError('game over');
     }
     if (this.isChecked(position)) {
-      throw new Error('already checked');
+      throw new CheckedError('already checked');
     }
     const player = this.getNextPlayer();
     this._check(position, player);

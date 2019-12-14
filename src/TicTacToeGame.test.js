@@ -1,6 +1,6 @@
 'use strict';
 
-import { Move, Winner, TicTacToeGame } from './TicTacToeGame';
+import { Move, Winner, TicTacToeGame, GameOverError, CheckedError } from './TicTacToeGame';
 
 const SIZE = 3;
 const MAX_POSITION =  SIZE*SIZE-1;
@@ -17,7 +17,7 @@ it('new instance', () => {
 it('new instance with bad size', () => {
   expect(() => {
     const game = new TicTacToeGame(-1);
-  }).toThrow('bad size');
+  }).toThrow(RangeError);
 });
 
 it('goToMove', () => {
@@ -31,7 +31,7 @@ it('goToMove with bad index', () => {
   const game = defaultTicTacToeGame();
   expect(() => {
     game.goToMove(1);
-  }).toThrow('bad index');
+  }).toThrow(RangeError);
 });
 
 it('check', () => {
@@ -45,10 +45,10 @@ it('check with bad position', () => {
   const game = defaultTicTacToeGame();
   expect(() => {
     game.check(-1);
-  }).toThrow('bad position');
+  }).toThrow(RangeError);
   expect(() => {
     game.check(MAX_POSITION + 1);
-  }).toThrow('bad position');
+  }).toThrow(RangeError);
 });
 
 it('check with already checked', () => {
@@ -56,7 +56,7 @@ it('check with already checked', () => {
   game.check(0);
   expect(() => {
     game.check(0);
-  }).toThrow('already checked');
+  }).toThrow(CheckedError);
 });
 
 it('check when game over', () => {
@@ -67,7 +67,7 @@ it('check when game over', () => {
   game.check(6);
   expect(() => {
     game.check(7);
-  }).toThrow('game over');
+  }).toThrow(GameOverError);
 });
 
 it('isChecked', () => {
