@@ -4,7 +4,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {TicTacToeGame, Move, Winner} from './TicTacToeGame';
+import { TicTacToeGame, Move, Winner, GameOverError, CheckedError } from './TicTacToeGame';
 import PropTypes from 'prop-types';
 
 export class BoardItem extends React.Component {
@@ -193,7 +193,13 @@ export class App extends React.Component {
         state.game.check(position);
         return {game: state.game};
       } catch(e) {
-        console.log(e.message)
+        switch(e.name) {
+            case 'GameOverError':
+            case 'CheckedError':
+              console.log(e.message);
+            default:
+              throw e;
+        }
       }
     });
   }

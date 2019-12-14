@@ -36,4 +36,5 @@
 + согласовать порядок аргументов TicTacToeGame Move Winner
 - code review
 + remove 'use strict'
-- кастомные ошибки
++ кастомные ошибки
++ обработка кастомных ошибок в App.check
