@@ -65,7 +65,7 @@ export class TicTacToeGame {
   }
 
   check(position) {
-    if (position < 0 || this._getMaxPosition() < position) {
+    if (! this._isValidPosition(position)) {
       throw new RangeError('bad position');
     }
     if (this._moves.length !== this._index) {
@@ -81,8 +81,11 @@ export class TicTacToeGame {
     this._check(position, player);
   }
 
-  _getMaxPosition() {
-    return (this._size * this._size) - 1;
+  _isValidPosition(position) {
+    if (position < 0 || (this._size*this._size-1) < position) {
+      return false;
+    }
+    return true;
   }
 
   _trucnateMoves() {
@@ -105,6 +108,10 @@ export class TicTacToeGame {
   }
 
   lookup(position) {
+    if (! this._isValidPosition(position)) {
+      throw new RangeError('bad position');
+    }
+    
     const moves = this._getMovesWithIndex();
     for(let i=0; i<moves.length; i++) {
       const move = moves[i];
