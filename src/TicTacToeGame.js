@@ -52,6 +52,10 @@ export class TicTacToeGame {
     }
     this._index = index;
   }
+  
+  getCurrentMove() {
+    return this._index;
+  }
 
   // return all moves
   getMoves() {
