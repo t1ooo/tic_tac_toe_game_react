@@ -117,9 +117,12 @@ export class Info extends React.Component {
 
   render() {
     const winner = this.props.winner;
-    return (winner === null)
-      ? <div>Next player: {this.props.nextPlayer}</div>
-      : <div>Winner: {winner.player} / {winner.type}</div>;
+    const content = (winner === null)
+      ? `Next player: ${this.props.nextPlayer}`
+      : `Winner: ${winner.player} / ${winner.type}`;
+    return (
+      <div className="info">{content}</div>
+    );
   }
 }
 
