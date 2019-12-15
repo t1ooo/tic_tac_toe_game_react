@@ -74,7 +74,7 @@ export class HistoryItem extends React.Component {
 
   render() {
     return (
-      <button onClick={this.props.goToMove}>
+      <button className="history-item" onClick={this.props.goToMove}>
         {this.props.content}
       </button>
     );
