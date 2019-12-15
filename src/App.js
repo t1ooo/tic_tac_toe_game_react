@@ -179,12 +179,8 @@ export class App extends React.Component {
 
   goToMove(index) {
     this.setState((state, props) => {
-      try {
-        state.game.goToMove(index);
-        return {game: state.game};
-      } catch(e) {
-        console.log(e.message)
-      }
+      state.game.goToMove(index);
+      return {game: state.game};
     });
   }
 
