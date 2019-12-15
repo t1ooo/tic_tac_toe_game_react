@@ -14,7 +14,7 @@ export class BoardItem extends React.Component {
 
   render () {
     return (
-      <div
+      <div className="board-item"
         onClick={this.props.check}
       >
         {this.props.lookup()}
