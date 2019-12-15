@@ -24,8 +24,32 @@ it('renders App', () => {
   render(<App />, container);
 });
 
+class AppTestHelper {
+  constructor(container) {
+    this.container = container;
+  }
+  
+  getInfo() { return this.container.querySelector('div[class="info"]'); }
+  getBoardItems(i) { return this.container.querySelectorAll('div[class="board-item"]').item(i); }
+  getHistoryItems(i) { return this.container.querySelectorAll('button[class="history-item"]').item(i); }
+  
+  clickBoardItem(i) {
+    act(() => {
+      this.getBoardItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
+    });
+  }
+  clickHistoryItem(i) {
+    act(() => {
+      this.getHistoryItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
+    });
+  };
+  getPlayer(i) { return i%2===0 ?'X':'O'; }
+  getNextPlayer(i) { return  i%2===0 ?'O':'X'; }
+}
+
 it('test App', () => { 
   const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
 
   //expect(app.getNextPlayer()).toStrictEqual('X');
   //expect(app.state.game.getMoves()).toStrictEqual([new Move('X', 0)]);
@@ -34,87 +58,70 @@ it('test App', () => {
   //expect(app.lookup(1)).toStrictEqual('');
   //expect(app.lookup(0)).toStrictEqual('');
   
-  const info = () => container.querySelector('div[class="info"]');
-  const boardItems = i => container.querySelectorAll('div[class="board-item"]').item(i);
-  const historyItems = i => container.querySelectorAll('button[class="history-item"]').item(i);
-  
-  const clickBoardItem = i => {
-    act(() => {
-      boardItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
-    });
-  };
-  const clickHistoryItem = i => {
-    act(() => {
-      historyItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
-    });
-  }; 
-  const player = i => i%2===0 ?'X':'O';
-  const nextPlayer = i => i%2===0 ?'O':'X';
-  
   // check init condition
-  expect(info().textContent).toBe('Next player: X');
-  expect(boardItems(0).textContent).toBe('');
-  expect(boardItems(1).textContent).toBe('');
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+  expect(ath.getBoardItems(0).textContent).toBe('');
+  expect(ath.getBoardItems(1).textContent).toBe('');
 
-  // check condition after click to board item
-  clickBoardItem(0);
-  expect(info().textContent).toBe('Next player: O');
-  expect(boardItems(0).textContent).toBe('X');
+  // check condition after ath.click to board item
+  ath.clickBoardItem(0);
+  expect(ath.getInfo().textContent).toBe('Next player: O');
+  expect(ath.getBoardItems(0).textContent).toBe('X');
   
-  clickBoardItem(1);
-  expect(info().textContent).toBe('Next player: X');
-  expect(boardItems(1).textContent).toBe('O');
+  ath.clickBoardItem(1);
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+  expect(ath.getBoardItems(1).textContent).toBe('O');
   
-  // check condition after reclick to board item
-  clickBoardItem(1);
-  expect(info().textContent).toBe('Next player: X');
-  expect(boardItems(1).textContent).toBe('O');
+  // check condition after reath.click to board item
+  ath.clickBoardItem(1);
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+  expect(ath.getBoardItems(1).textContent).toBe('O');
   
 
-  // check condition after click to history item
-  clickBoardItem(2);
-  clickBoardItem(3);
+  // check condition after ath.click to history item
+  ath.clickBoardItem(2);
+  ath.clickBoardItem(3);
   
-  expect(info().textContent).toBe('Next player: X');
-  expect(boardItems(0).textContent).toBe('X');
-  expect(boardItems(1).textContent).toBe('O');
-  expect(boardItems(2).textContent).toBe('X');
-  expect(boardItems(3).textContent).toBe('O');
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+  expect(ath.getBoardItems(0).textContent).toBe('X');
+  expect(ath.getBoardItems(1).textContent).toBe('O');
+  expect(ath.getBoardItems(2).textContent).toBe('X');
+  expect(ath.getBoardItems(3).textContent).toBe('O');
   
-  clickHistoryItem(2);
-  expect(info().textContent).toBe('Next player: X');
-  expect(boardItems(0).textContent).toBe('X');
-  expect(boardItems(1).textContent).toBe('O');
-  expect(boardItems(2).textContent).toBe('');
-  expect(boardItems(3).textContent).toBe('');
+  ath.clickHistoryItem(2);
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+  expect(ath.getBoardItems(0).textContent).toBe('X');
+  expect(ath.getBoardItems(1).textContent).toBe('O');
+  expect(ath.getBoardItems(2).textContent).toBe('');
+  expect(ath.getBoardItems(3).textContent).toBe('');
   
-  clickHistoryItem(3);
-  expect(info().textContent).toBe('Next player: O');
-  expect(boardItems(0).textContent).toBe('X');
-  expect(boardItems(1).textContent).toBe('O');
-  expect(boardItems(2).textContent).toBe('X');
-  expect(boardItems(3).textContent).toBe('');
+  ath.clickHistoryItem(3);
+  expect(ath.getInfo().textContent).toBe('Next player: O');
+  expect(ath.getBoardItems(0).textContent).toBe('X');
+  expect(ath.getBoardItems(1).textContent).toBe('O');
+  expect(ath.getBoardItems(2).textContent).toBe('X');
+  expect(ath.getBoardItems(3).textContent).toBe('');
   
   // check condition after win
-  clickHistoryItem(0);
-  clickBoardItem(0); clickBoardItem(1);
-  clickBoardItem(3); clickBoardItem(2);
-  clickBoardItem(6); clickBoardItem(4);
-  expect(info().textContent).toBe('Winner: X / vertical');
-  expect(boardItems(4).textContent).toBe('');
+  ath.clickHistoryItem(0);
+  ath.clickBoardItem(0); ath.clickBoardItem(1);
+  ath.clickBoardItem(3); ath.clickBoardItem(2);
+  ath.clickBoardItem(6); ath.clickBoardItem(4);
+  expect(ath.getInfo().textContent).toBe('Winner: X / vertical');
+  expect(ath.getBoardItems(4).textContent).toBe('');
   
   //
   expect(() => {
     app.check(10);
   }).toThrow(RangeError);
   
-  //clickHistoryItem(1);
-  //expect(boardItems(1).textContent).toBe('O');
-  //expect(info().textContent).toBe('Next player: O');
-  //expect(boardItems(1).textContent).toBe('');
+  //ath.clickHistoryItem(1);
+  //expect(ath.getBoardItems(1).textContent).toBe('O');
+  //expect(ath.getInfo().textContent).toBe('Next player: O');
+  //expect(ath.getBoardItems(1).textContent).toBe('');
   
-/*   clickHistoryItem(2); 
-  expect(info().textContent).toBe('Next player: X');
+/*   ath.clickHistoryItem(2); 
+  expect(ath.getInfo().textContent).toBe('Next player: X');
   expect(boardItems(0).textContent).toBe('O'); */
 });
 
