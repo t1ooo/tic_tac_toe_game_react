@@ -50,13 +50,6 @@ class AppTestHelper {
 it('test App', () => { 
   const app = render(<App />, container);
   const ath = new AppTestHelper(container);
-
-  //expect(app.getNextPlayer()).toStrictEqual('X');
-  //expect(app.state.game.getMoves()).toStrictEqual([new Move('X', 0)]);
-  //expect(app.getNextPlayer()).toStrictEqual('O');
-  //expect(app.lookup(0)).toStrictEqual('X');
-  //expect(app.lookup(1)).toStrictEqual('');
-  //expect(app.lookup(0)).toStrictEqual('');
   
   // check init condition
   expect(ath.getInfo().textContent).toBe('Next player: X');
@@ -114,15 +107,6 @@ it('test App', () => {
   expect(() => {
     app.check(10);
   }).toThrow(RangeError);
-  
-  //ath.clickHistoryItem(1);
-  //expect(ath.getBoardItems(1).textContent).toBe('O');
-  //expect(ath.getInfo().textContent).toBe('Next player: O');
-  //expect(ath.getBoardItems(1).textContent).toBe('');
-  
-/*   ath.clickHistoryItem(2); 
-  expect(ath.getInfo().textContent).toBe('Next player: X');
-  expect(boardItems(0).textContent).toBe('O'); */
 });
 
 it('renders BoardItem', () => {
