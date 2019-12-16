@@ -45,17 +45,27 @@ class AppTestHelper {
     return this.container.querySelectorAll('button[class="history-item"]');
   }
 
+  getBoardItem(i) {
+    return this.getBoardItems().item(i);
+  }
+
+  getHistoryItem(i) {
+    return this.getHistoryItems().item(i);
+  }
+
   clickBoardItem(i) {
+    this.click(this.getBoardItem(i));
+  }
+
+  clickHistoryItem(i) {
+    this.click(this.getHistoryItem(i));
+  };
+
+  click(el) {
     act(() => {
-      this.getBoardItem(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
+      el.dispatchEvent(new MouseEvent('click', {bubbles: true}));
     });
   }
-  
-  clickHistoryItem(i) {
-    act(() => {
-      this.getHistoryItem(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
-    });
-  };
 }
 
 it('test App init cond', () => {
@@ -68,27 +78,66 @@ it('test App init cond', () => {
   }
 });
 
-it('test App after click to board item', () => {
+it('test App after click to board item: next player must change', () => {
   const app = render(<App />, container);
   const ath = new AppTestHelper(container);
 
   ath.clickBoardItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: O');
-  expect(ath.getBoardItem(0).textContent).toBe('X');
 
   ath.clickBoardItem(1);
   expect(ath.getInfo().textContent).toBe('Next player: X');
+});
+
+it('test App after click to board item: content', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+
+  ath.clickBoardItem(1);
   expect(ath.getBoardItem(1).textContent).toBe('O');
 });
 
-it('test App after double click to board item', () => {
+it('test App after double click to board item: next player must not change', () => {
   const app = render(<App />, container);
   const ath = new AppTestHelper(container);
 
   ath.clickBoardItem(0);
   ath.clickBoardItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: O');
+});
+
+it('test App after double click to board item: content', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  ath.clickBoardItem(0);
   expect(ath.getBoardItem(0).textContent).toBe('X');
+});
+
+it('test App after click to board item: history item must be add', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+  
+  expect(ath.getHistoryItems().length).toBe(1);
+  
+  ath.clickBoardItem(0);
+  expect(ath.getHistoryItems().length).toBe(2);
+  
+  ath.clickBoardItem(1);
+  expect(ath.getHistoryItems().length).toBe(3);
+});
+
+it('test App after double click to board item: history item must not be add', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  ath.clickBoardItem(0);
+  expect(ath.getHistoryItems().length).toBe(2);
 });
 
 it('test App after click to history item', () => {
