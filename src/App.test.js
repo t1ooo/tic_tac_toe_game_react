@@ -37,23 +37,23 @@ class AppTestHelper {
     return this.container.querySelector('div[class="info"]'); 
   }
   
-  getBoardItems(i) { 
+  getBoardItem(i) { 
     return this.container.querySelectorAll('div[class="board-item"]').item(i); 
   }
   
-  getHistoryItems(i) { 
+  getHistoryItem(i) { 
     return this.container.querySelectorAll('button[class="history-item"]').item(i); 
   }
 
   clickBoardItem(i) {
     act(() => {
-      this.getBoardItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
+      this.getBoardItem(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
     });
   }
   
   clickHistoryItem(i) {
     act(() => {
-      this.getHistoryItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
+      this.getHistoryItem(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
     });
   };
 }
@@ -64,7 +64,7 @@ it('test App init cond', () => {
 
   expect(ath.getInfo().textContent).toBe('Next player: X');
   for (let i=0; i<3*3; i++) {
-    expect(ath.getBoardItems(i).textContent).toBe('');
+    expect(ath.getBoardItem(i).textContent).toBe('');
   }
 });
 
@@ -74,11 +74,11 @@ it('test App after click to board item', () => {
 
   ath.clickBoardItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: O');
-  expect(ath.getBoardItems(0).textContent).toBe('X');
+  expect(ath.getBoardItem(0).textContent).toBe('X');
 
   ath.clickBoardItem(1);
   expect(ath.getInfo().textContent).toBe('Next player: X');
-  expect(ath.getBoardItems(1).textContent).toBe('O');
+  expect(ath.getBoardItem(1).textContent).toBe('O');
 });
 
 it('test App after double click to board item', () => {
@@ -88,7 +88,7 @@ it('test App after double click to board item', () => {
   ath.clickBoardItem(0);
   ath.clickBoardItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: O');
-  expect(ath.getBoardItems(0).textContent).toBe('X');
+  expect(ath.getBoardItem(0).textContent).toBe('X');
 });
 
 it('test App after click to history item', () => {
@@ -101,27 +101,27 @@ it('test App after click to history item', () => {
 
   ath.clickHistoryItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: X');
-  expect(ath.getBoardItems(0).textContent).toBe('');
-  expect(ath.getBoardItems(1).textContent).toBe('');
-  expect(ath.getBoardItems(2).textContent).toBe('');
+  expect(ath.getBoardItem(0).textContent).toBe('');
+  expect(ath.getBoardItem(1).textContent).toBe('');
+  expect(ath.getBoardItem(2).textContent).toBe('');
 
   ath.clickHistoryItem(1);
   expect(ath.getInfo().textContent).toBe('Next player: O');
-  expect(ath.getBoardItems(0).textContent).toBe('X');
-  expect(ath.getBoardItems(1).textContent).toBe('');
-  expect(ath.getBoardItems(2).textContent).toBe('');
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+  expect(ath.getBoardItem(1).textContent).toBe('');
+  expect(ath.getBoardItem(2).textContent).toBe('');
 
   ath.clickHistoryItem(2);
   expect(ath.getInfo().textContent).toBe('Next player: X');
-  expect(ath.getBoardItems(0).textContent).toBe('X');
-  expect(ath.getBoardItems(1).textContent).toBe('O');
-  expect(ath.getBoardItems(2).textContent).toBe('');
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+  expect(ath.getBoardItem(1).textContent).toBe('O');
+  expect(ath.getBoardItem(2).textContent).toBe('');
 
   ath.clickHistoryItem(3);
   expect(ath.getInfo().textContent).toBe('Next player: O');
-  expect(ath.getBoardItems(0).textContent).toBe('X');
-  expect(ath.getBoardItems(1).textContent).toBe('O');
-  expect(ath.getBoardItems(2).textContent).toBe('X');
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+  expect(ath.getBoardItem(1).textContent).toBe('O');
+  expect(ath.getBoardItem(2).textContent).toBe('X');
 });
 
 it('test App after detect winner: info', () => {
@@ -147,8 +147,8 @@ it('test App after detect winner: clicks not work', () => {
   ath.clickBoardItem(5);
 
   // not clicked
-  expect(ath.getBoardItems(4).textContent).toBe('');
-  expect(ath.getBoardItems(5).textContent).toBe('');
+  expect(ath.getBoardItem(4).textContent).toBe('');
+  expect(ath.getBoardItem(5).textContent).toBe('');
 });
 
 it('renders BoardItem', () => {
