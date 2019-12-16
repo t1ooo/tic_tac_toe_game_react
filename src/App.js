@@ -127,11 +127,18 @@ export class Info extends React.Component {
 }
 
 export class App extends React.Component {
+  static propTypes = {
+    size: PropTypes.number,
+  };
+
+  static defaultProps = {
+    size: 3,
+  };
+
   constructor(props) {
     super(props);
-    this.size = 3;
     this.state = {
-      game: new TicTacToeGame(this.size),
+      game: new TicTacToeGame(props.size),
     };
   }
 
@@ -139,7 +146,7 @@ export class App extends React.Component {
     return (
       <div className="App">
           <Board
-            size={this.size}
+            size={this.props.size}
             check={i => this.check(i)}
             lookup={i => this.lookup(i)}
           />
