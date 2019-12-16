@@ -28,11 +28,11 @@ class AppTestHelper {
   constructor(container) {
     this.container = container;
   }
-  
+
   getInfo() { return this.container.querySelector('div[class="info"]'); }
   getBoardItems(i) { return this.container.querySelectorAll('div[class="board-item"]').item(i); }
   getHistoryItems(i) { return this.container.querySelectorAll('button[class="history-item"]').item(i); }
-  
+
   clickBoardItem(i) {
     act(() => {
       this.getBoardItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
@@ -64,7 +64,7 @@ it('test App after click to board item', () => {
   ath.clickBoardItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: O');
   expect(ath.getBoardItems(0).textContent).toBe('X');
-  
+
   ath.clickBoardItem(1);
   expect(ath.getInfo().textContent).toBe('Next player: X');
   expect(ath.getBoardItems(1).textContent).toBe('O');
@@ -87,47 +87,30 @@ it('test App after click to history item', () => {
   ath.clickBoardItem(0);
   ath.clickBoardItem(1);
   ath.clickBoardItem(2);
-  
-  /* 
+
   ath.clickHistoryItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: X');
   expect(ath.getBoardItems(0).textContent).toBe('');
   expect(ath.getBoardItems(1).textContent).toBe('');
   expect(ath.getBoardItems(2).textContent).toBe('');
-  
+
   ath.clickHistoryItem(1);
   expect(ath.getInfo().textContent).toBe('Next player: O');
   expect(ath.getBoardItems(0).textContent).toBe('X');
   expect(ath.getBoardItems(1).textContent).toBe('');
   expect(ath.getBoardItems(2).textContent).toBe('');
-  
+
   ath.clickHistoryItem(2);
   expect(ath.getInfo().textContent).toBe('Next player: X');
   expect(ath.getBoardItems(0).textContent).toBe('X');
   expect(ath.getBoardItems(1).textContent).toBe('O');
   expect(ath.getBoardItems(2).textContent).toBe('');
-  
+
   ath.clickHistoryItem(3);
   expect(ath.getInfo().textContent).toBe('Next player: O');
   expect(ath.getBoardItems(0).textContent).toBe('X');
   expect(ath.getBoardItems(1).textContent).toBe('O');
-  expect(ath.getBoardItems(2).textContent).toBe('X'); 
-  */
-  
-  const testData = [
-      {history:0, nextPlayer:'Next player: X', contents:['' , '' , '' ]},
-      {history:1, nextPlayer:'Next player: O', contents:['X', '' , '' ]},
-      {history:2, nextPlayer:'Next player: X', contents:['X', 'O', '' ]},
-      {history:3, nextPlayer:'Next player: O', contents:['X', 'O', 'X']},
-  ];
-  
-  testData.forEach(x=>{
-      ath.clickHistoryItem(x.history);
-      expect(ath.getInfo().textContent).toBe(x.nextPlayer);
-      x.contents.forEach((content,i)=> {
-          expect(ath.getBoardItems(i).textContent).toBe(content);
-      });
-  });
+  expect(ath.getBoardItems(2).textContent).toBe('X');
 });
 
 it('test App after detect winner: info', () => {
@@ -151,7 +134,7 @@ it('test App after detect winner: clicks not work', () => {
 
   ath.clickBoardItem(4);
   ath.clickBoardItem(5);
-  
+
   // not clicked
   expect(ath.getBoardItems(4).textContent).toBe('');
   expect(ath.getBoardItems(5).textContent).toBe('');
