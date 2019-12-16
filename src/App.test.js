@@ -24,6 +24,10 @@ it('renders App', () => {
   render(<App />, container);
 });
 
+it('renders App with custom size', () => {
+  render(<App size={4}/>, container);
+});
+
 class AppTestHelper {
   constructor(container) {
     this.container = container;
