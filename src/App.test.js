@@ -88,6 +88,7 @@ it('test App after click to history item', () => {
   ath.clickBoardItem(1);
   ath.clickBoardItem(2);
   
+  /* 
   ath.clickHistoryItem(0);
   expect(ath.getInfo().textContent).toBe('Next player: X');
   expect(ath.getBoardItems(0).textContent).toBe('');
@@ -110,7 +111,23 @@ it('test App after click to history item', () => {
   expect(ath.getInfo().textContent).toBe('Next player: O');
   expect(ath.getBoardItems(0).textContent).toBe('X');
   expect(ath.getBoardItems(1).textContent).toBe('O');
-  expect(ath.getBoardItems(2).textContent).toBe('X');
+  expect(ath.getBoardItems(2).textContent).toBe('X'); 
+  */
+  
+  const testData = [
+      {history:0, nextPlayer:'Next player: X', contents:['' , '' , '' ]},
+      {history:1, nextPlayer:'Next player: O', contents:['X', '' , '' ]},
+      {history:2, nextPlayer:'Next player: X', contents:['X', 'O', '' ]},
+      {history:3, nextPlayer:'Next player: O', contents:['X', 'O', 'X']},
+  ];
+  
+  testData.forEach(x=>{
+      ath.clickHistoryItem(x.history);
+      expect(ath.getInfo().textContent).toBe(x.nextPlayer);
+      x.contents.forEach((content,i)=> {
+          expect(ath.getBoardItems(i).textContent).toBe(content);
+      });
+  });
 });
 
 it('test App after detect winner: info', () => {
