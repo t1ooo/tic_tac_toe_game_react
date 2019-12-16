@@ -43,8 +43,6 @@ class AppTestHelper {
       this.getHistoryItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
     });
   };
-  getPlayer(i) { return i%2===0 ?'X':'O'; }
-  getNextPlayer(i) { return  i%2===0 ?'O':'X'; }
 }
 
 it('test App init cond', () => {
