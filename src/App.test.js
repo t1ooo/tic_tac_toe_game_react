@@ -33,16 +33,16 @@ class AppTestHelper {
     this.container = container;
   }
 
-  getInfo() { 
-    return this.container.querySelector('div[class="info"]'); 
+  getInfo() {
+    return this.container.querySelector('div[class="info"]');
   }
-  
-  getBoardItem(i) { 
-    return this.container.querySelectorAll('div[class="board-item"]').item(i); 
+
+  getBoardItems() {
+    return this.container.querySelectorAll('div[class="board-item"]');
   }
-  
-  getHistoryItem(i) { 
-    return this.container.querySelectorAll('button[class="history-item"]').item(i); 
+
+  getHistoryItems() {
+    return this.container.querySelectorAll('button[class="history-item"]');
   }
 
   clickBoardItem(i) {
