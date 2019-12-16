@@ -29,15 +29,24 @@ class AppTestHelper {
     this.container = container;
   }
 
-  getInfo() { return this.container.querySelector('div[class="info"]'); }
-  getBoardItems(i) { return this.container.querySelectorAll('div[class="board-item"]').item(i); }
-  getHistoryItems(i) { return this.container.querySelectorAll('button[class="history-item"]').item(i); }
+  getInfo() { 
+    return this.container.querySelector('div[class="info"]'); 
+  }
+  
+  getBoardItems(i) { 
+    return this.container.querySelectorAll('div[class="board-item"]').item(i); 
+  }
+  
+  getHistoryItems(i) { 
+    return this.container.querySelectorAll('button[class="history-item"]').item(i); 
+  }
 
   clickBoardItem(i) {
     act(() => {
       this.getBoardItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
     });
   }
+  
   clickHistoryItem(i) {
     act(() => {
       this.getHistoryItems(i).dispatchEvent(new MouseEvent('click', {bubbles: true}));
