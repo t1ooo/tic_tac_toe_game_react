@@ -35,24 +35,24 @@ export class Board extends React.Component {
     return (
       <table>
           <tbody>
-            {arrayRange(0, size, size).map(x => this.tr(x))}
+            {arrayRange(0, size, size).map(x => this._tr(x))}
           </tbody>
       </table>
     );
   }
 
-  tr(x) {
+  _tr(x) {
     const size = this.props.size;
     return (
       <tr
         key={x}
       >
-        {arrayRange(0, 1, size).map(y => this.td(x+y))}
+        {arrayRange(0, 1, size).map(y => this._td(x+y))}
       </tr>
     );
   }
 
-  td(position) {
+  _td(position) {
     return (
       <td
         key={position}
@@ -147,36 +147,36 @@ export class App extends React.Component {
       <div className="App">
           <Board
             size={this.props.size}
-            check={i => this.check(i)}
-            lookup={i => this.lookup(i)}
+            check={i => this._check(i)}
+            lookup={i => this._lookup(i)}
           />
           <div>
             <Info
-              winner={this.getWinner()}
-              nextPlayer={this.getNextPlayer()}
+              winner={this._getWinner()}
+              nextPlayer={this._getNextPlayer()}
             />
             <History
-              goToMove={i => this.goToMove(i)}
-              moves={this.getMoves()}
+              goToMove={i => this._goToMove(i)}
+              moves={this._getMoves()}
             />
           </div>
       </div>
     );
   }
 
-  getMoves() {
+  _getMoves() {
     return this.state.game.getMoves();
   }
 
-  getNextPlayer() {
+  _getNextPlayer() {
     return this.state.game.getNextPlayer();
   }
 
-  getWinner() {
+  _getWinner() {
     return this.state.game.getWinner();
   }
 
-  lookup(position) {
+  _lookup(position) {
     const move = this.state.game.lookup(position);
     if (move === null) {
       return '';
@@ -184,14 +184,14 @@ export class App extends React.Component {
     return move.player;
   }
 
-  goToMove(index) {
+  _goToMove(index) {
     this.setState((state, props) => {
       state.game.goToMove(index);
       return {game: state.game};
     });
   }
 
-  check(position) {
+  _check(position) {
     console.log('check', position);
     this.setState((state, props) => {
       try {
