@@ -20,12 +20,164 @@ afterEach(() => {
   container = null;
 });
 
-it('renders App', () => {
+it('App', () => {
   render(<App />, container);
 });
 
-it('renders App with custom size', () => {
+it('App: custom size', () => {
   render(<App size={4}/>, container);
+});
+
+it('App: init cond', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+  for (let i=0; i<3*3; i++) {
+    expect(ath.getBoardItem(i).textContent).toBe('');
+  }
+});
+
+it('App: click to board item: next player must change', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  expect(ath.getInfo().textContent).toBe('Next player: O');
+
+  ath.clickBoardItem(1);
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+});
+
+it('App: click to board item: content', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+
+  ath.clickBoardItem(1);
+  expect(ath.getBoardItem(1).textContent).toBe('O');
+});
+
+it('App: double click to board item: next player must not change', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  expect(ath.getInfo().textContent).toBe('Next player: O');
+
+  ath.clickBoardItem(0);
+  expect(ath.getInfo().textContent).toBe('Next player: O');
+});
+
+it('App: double click to board item: content must not be change', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+  
+  ath.clickBoardItem(0);
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+});
+
+it('App: click to board item: history item must be add', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+  
+  expect(ath.getHistoryItems().length).toBe(1);
+  
+  ath.clickBoardItem(0);
+  expect(ath.getHistoryItems().length).toBe(2);
+  
+  ath.clickBoardItem(1);
+  expect(ath.getHistoryItems().length).toBe(3);
+});
+
+it('App: double click to board item: history item must not be add', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  ath.clickBoardItem(0);
+  expect(ath.getHistoryItems().length).toBe(2);
+});
+
+it('App: click to history item: check next player', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  ath.clickBoardItem(1);
+  ath.clickBoardItem(2);
+
+  ath.clickHistoryItem(0);
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+
+  ath.clickHistoryItem(1);
+  expect(ath.getInfo().textContent).toBe('Next player: O');
+
+  ath.clickHistoryItem(2);
+  expect(ath.getInfo().textContent).toBe('Next player: X');
+
+  ath.clickHistoryItem(3);
+  expect(ath.getInfo().textContent).toBe('Next player: O');
+});
+
+it('App: click to history item: check board item content', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0);
+  ath.clickBoardItem(1);
+  ath.clickBoardItem(2);
+
+  ath.clickHistoryItem(0);
+  expect(ath.getBoardItem(0).textContent).toBe('');
+  expect(ath.getBoardItem(1).textContent).toBe('');
+  expect(ath.getBoardItem(2).textContent).toBe('');
+
+  ath.clickHistoryItem(1);
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+  expect(ath.getBoardItem(1).textContent).toBe('');
+  expect(ath.getBoardItem(2).textContent).toBe('');
+
+  ath.clickHistoryItem(2);
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+  expect(ath.getBoardItem(1).textContent).toBe('O');
+  expect(ath.getBoardItem(2).textContent).toBe('');
+
+  ath.clickHistoryItem(3);
+  expect(ath.getBoardItem(0).textContent).toBe('X');
+  expect(ath.getBoardItem(1).textContent).toBe('O');
+  expect(ath.getBoardItem(2).textContent).toBe('X');
+});
+
+it('App: game over: check info', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0); ath.clickBoardItem(1);
+  ath.clickBoardItem(3); ath.clickBoardItem(2);
+  ath.clickBoardItem(6);
+
+  expect(ath.getInfo().textContent).toBe('Winner: X / vertical');
+});
+
+it('App: game over: click must not work', () => {
+  const app = render(<App />, container);
+  const ath = new AppTestHelper(container);
+
+  ath.clickBoardItem(0); ath.clickBoardItem(1);
+  ath.clickBoardItem(3); ath.clickBoardItem(2);
+  ath.clickBoardItem(6);
+
+  ath.clickBoardItem(4);
+  ath.clickBoardItem(5);
+
+  expect(ath.getBoardItem(4).textContent).toBe('');
+  expect(ath.getBoardItem(5).textContent).toBe('');
 });
 
 class AppTestHelper {
@@ -68,139 +220,7 @@ class AppTestHelper {
   }
 }
 
-it('test App init cond', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  expect(ath.getInfo().textContent).toBe('Next player: X');
-  for (let i=0; i<3*3; i++) {
-    expect(ath.getBoardItem(i).textContent).toBe('');
-  }
-});
-
-it('test App after click to board item: next player must change', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0);
-  expect(ath.getInfo().textContent).toBe('Next player: O');
-
-  ath.clickBoardItem(1);
-  expect(ath.getInfo().textContent).toBe('Next player: X');
-});
-
-it('test App after click to board item: content', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0);
-  expect(ath.getBoardItem(0).textContent).toBe('X');
-
-  ath.clickBoardItem(1);
-  expect(ath.getBoardItem(1).textContent).toBe('O');
-});
-
-it('test App after double click to board item: next player must not change', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0);
-  ath.clickBoardItem(0);
-  expect(ath.getInfo().textContent).toBe('Next player: O');
-});
-
-it('test App after double click to board item: content', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0);
-  ath.clickBoardItem(0);
-  expect(ath.getBoardItem(0).textContent).toBe('X');
-});
-
-it('test App after click to board item: history item must be add', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-  
-  expect(ath.getHistoryItems().length).toBe(1);
-  
-  ath.clickBoardItem(0);
-  expect(ath.getHistoryItems().length).toBe(2);
-  
-  ath.clickBoardItem(1);
-  expect(ath.getHistoryItems().length).toBe(3);
-});
-
-it('test App after double click to board item: history item must not be add', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0);
-  ath.clickBoardItem(0);
-  expect(ath.getHistoryItems().length).toBe(2);
-});
-
-it('test App after click to history item', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0);
-  ath.clickBoardItem(1);
-  ath.clickBoardItem(2);
-
-  ath.clickHistoryItem(0);
-  expect(ath.getInfo().textContent).toBe('Next player: X');
-  expect(ath.getBoardItem(0).textContent).toBe('');
-  expect(ath.getBoardItem(1).textContent).toBe('');
-  expect(ath.getBoardItem(2).textContent).toBe('');
-
-  ath.clickHistoryItem(1);
-  expect(ath.getInfo().textContent).toBe('Next player: O');
-  expect(ath.getBoardItem(0).textContent).toBe('X');
-  expect(ath.getBoardItem(1).textContent).toBe('');
-  expect(ath.getBoardItem(2).textContent).toBe('');
-
-  ath.clickHistoryItem(2);
-  expect(ath.getInfo().textContent).toBe('Next player: X');
-  expect(ath.getBoardItem(0).textContent).toBe('X');
-  expect(ath.getBoardItem(1).textContent).toBe('O');
-  expect(ath.getBoardItem(2).textContent).toBe('');
-
-  ath.clickHistoryItem(3);
-  expect(ath.getInfo().textContent).toBe('Next player: O');
-  expect(ath.getBoardItem(0).textContent).toBe('X');
-  expect(ath.getBoardItem(1).textContent).toBe('O');
-  expect(ath.getBoardItem(2).textContent).toBe('X');
-});
-
-it('test App after detect winner: info', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0); ath.clickBoardItem(1);
-  ath.clickBoardItem(3); ath.clickBoardItem(2);
-  ath.clickBoardItem(6);
-
-  expect(ath.getInfo().textContent).toBe('Winner: X / vertical');
-});
-
-it('test App after detect winner: clicks not work', () => {
-  const app = render(<App />, container);
-  const ath = new AppTestHelper(container);
-
-  ath.clickBoardItem(0); ath.clickBoardItem(1);
-  ath.clickBoardItem(3); ath.clickBoardItem(2);
-  ath.clickBoardItem(6);
-
-  ath.clickBoardItem(4);
-  ath.clickBoardItem(5);
-
-  // not clicked
-  expect(ath.getBoardItem(4).textContent).toBe('');
-  expect(ath.getBoardItem(5).textContent).toBe('');
-});
-
-it('renders BoardItem', () => {
+it('BoardItem', () => {
   const position = '42';
   const check = jest.fn();
   const lookup = () => position;
@@ -224,7 +244,7 @@ it('renders BoardItem', () => {
   expect(container.textContent).toBe(position);
 });
 
-it('renders HistoryItem', () => {
+it('HistoryItem', () => {
   const goToMove = jest.fn();
   const content = 'some content';
 
@@ -247,7 +267,7 @@ it('renders HistoryItem', () => {
   expect(container.textContent).toBe(content);
 });
 
-it('renders History', () => {
+it('History', () => {
   const goToMove = jest.fn(x=>x);
   const moves = [new Move('X', 0), new Move('O', 0)];
 
@@ -275,7 +295,7 @@ it('renders History', () => {
   expect(buttons.length).toBe(moves.length + 1);
 });
 
-it('renders Info', () => {
+it('Info', () => {
   const nextPlayer = 'Name';
   act(() => {
     render(<Info winner={null} nextPlayer={nextPlayer}/>, container);
