@@ -38,3 +38,4 @@
 + remove 'use strict'
 + кастомные ошибки
 + обработка кастомных ошибок в App.check
++ private methods with underscore
