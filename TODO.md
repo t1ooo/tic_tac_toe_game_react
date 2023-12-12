@@ -38,4 +38,7 @@
 + remove 'use strict'
 + кастомные ошибки
 + обработка кастомных ошибок в App.check
++ дописать тесты App
++ добавить size через App props
+? удалить тесты компонентов в App
 + private methods with underscore
